@@ -39,16 +39,17 @@
   html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--page); color: var(--ink); font: 16px/1.6 var(--ui); -webkit-font-smoothing: antialiased; }
   img, video { max-width: 100%; }
-  .shell {
-    max-width: 1200px; margin: 0 auto;
-    padding-left: max(16px, env(safe-area-inset-left, 0px));
-    padding-right: max(16px, env(safe-area-inset-right, 0px));
-    padding-block: 18px 40px;
-  }
-  .sheet { background: var(--paper); border-radius: var(--r-xl); overflow: hidden; }
+  /* Le site occupe toute la largeur de l'écran ; seul le contenu est borné. */
+  body { background: var(--paper); }
+  .shell { width: 100%; }
+  .sheet { background: var(--paper); overflow: hidden; }
+  .dark, .final { max-width: 1200px; }
+  .dark { margin-left: auto !important; margin-right: auto !important; }
+  .final { margin-left: auto; margin-right: auto; }
+  @media (max-width: 1248px) { .dark { margin-left: 24px !important; margin-right: 24px !important; } .final { margin-left: 24px; margin-right: 24px; } }
 
   /* Barre de navigation */
-  nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 28px; border-bottom: 1px solid var(--line); }
+  nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px max(28px, calc((100% - 1200px) / 2)); border-bottom: 1px solid var(--line); }
   .brand { display: flex; align-items: center; gap: 8px; font: 700 22px/1 var(--display); letter-spacing: -.8px; color: var(--ink); text-decoration: none; }
   .brand svg { width: 24px; height: 24px; }
   .links { display: flex; gap: 22px; font-size: 14px; }
@@ -165,7 +166,7 @@
   .final h2 { color: #fff; }
   .final p { margin: 8px 0 0; color: #FFE1E6; }
   .final .pill.primary .dot { background: #fff; color: var(--red); }
-  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 18px 8px 0; color: var(--muted); font-size: 13px; }
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 22px max(24px, calc((100% - 1200px) / 2)) max(28px, env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
 
   /* Fenêtre après clic sur Essayer */
   dialog { border: 0; border-radius: var(--r-xl); padding: 0; max-width: 460px; width: calc(100% - 32px); background: var(--paper); color: var(--ink); box-shadow: 0 40px 80px -20px rgba(26, 5, 9, .5); }
@@ -185,12 +186,19 @@
     .steps { grid-template-columns: 1fr; }
     .dash { grid-template-columns: 1fr; }
     .vgrid { grid-template-columns: 1fr; }
-    .final { margin: 0 12px 12px; padding: 32px 24px; }
+    .final { padding: 32px 24px; }
+    .dark { margin-left: 16px !important; margin-right: 16px !important; }
+    .final { margin-left: 16px; margin-right: 16px; }
+    .hero { padding: 48px 16px 32px; }
+    .install, .voices, .feedback { padding-left: 16px; padding-right: 16px; }
     .chip.a { left: 8px; } .chip.b { right: 8px; }
     .chip { font-size: 12px; padding: 8px 10px; }
     .stage { padding: 8px 8px 0; }
     nav { padding: 14px 16px; }
   }
+  .final { margin: 0 auto 32px !important; width: calc(100% - 48px); }
+  .voices { padding-top: 64px; }
+  @media (max-width: 860px) { .final { width: calc(100% - 32px); margin-bottom: 24px !important; } }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .pill { transition: none; } }
 </style>
 </head>
@@ -344,15 +352,15 @@
     <button class="close" type="button" id="buyClose">Fermer</button>
     <h3 id="buyTitle">Paie 500 FCFA avec Wave</h3>
     <ol>
-      <li>Wave s'ouvre dans un nouvel onglet avec le montant déjà indiqué.</li>
-      <li>Valide le paiement de <b>500 FCFA</b>.</li>
-      <li>Reviens ici et télécharge Flip.</li>
+      <li>Wave s'ouvre avec le montant déjà indiqué. Valide le paiement de <b>500 FCFA</b>.</li>
+      <li>Envoie la capture de ton reçu Wave sur WhatsApp.</li>
+      <li>Dès que le paiement est vérifié, tu reçois ton lien de téléchargement de Flip.</li>
     </ol>
     <div class="row">
       <a class="pill red" id="waveGo" href="#" target="_blank" rel="noopener">Payer avec Wave<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
-      <a class="pill light" id="dlAfter" href="downloads/Flip_v4.1_beta.zip" download hidden>Télécharger Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></svg></span></a>
+      <a class="pill light" id="proof" href="#" target="_blank" rel="noopener">J'ai payé, envoyer mon reçu<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
     </div>
-    <p style="font-size:13px;color:var(--muted)">En payant, tu acceptes les <a href="legal.html#cgv" style="color:var(--ink)">conditions générales de vente</a>. Prix de la bêta, il augmentera avec les prochaines versions. Un souci de paiement ? WhatsApp au +221 77 484 72 84.</p>
+    <p style="font-size:13px;color:var(--muted)">En payant, tu acceptes les <a href="legal.html#cgv" style="color:var(--ink)">conditions générales de vente</a>. Prix de la bêta, il augmentera avec les prochaines versions.</p>
   </div>
 </dialog>
 
@@ -361,18 +369,15 @@
   var WAVE_LINK = "https://pay.wave.com/m/M_sn_epQ7lFDO_gRz/c/sn/?amount=500";
   var dlg = document.getElementById("buy");
   var go = document.getElementById("waveGo");
-  var dl = document.getElementById("dlAfter");
+  var WA_PROOF = "https://wa.me/221774847284?text=" + encodeURIComponent("Bonjour, je viens de payer Flip (500 FCFA) avec Wave. Voici mon reçu :");
   go.href = WAVE_LINK;
+  document.getElementById("proof").href = WA_PROOF;
 
   function openBuy(e) {
     e.preventDefault();
     if (dlg.showModal) dlg.showModal(); else window.open(WAVE_LINK, "_blank", "noopener");
   }
   Array.prototype.forEach.call(document.querySelectorAll(".try"), function (a) { a.addEventListener("click", openBuy); });
-  go.addEventListener("click", function () {
-    dl.hidden = false;
-    go.querySelector("span") && (go.firstChild.textContent = "Rouvrir Wave");
-  });
   document.getElementById("buyClose").addEventListener("click", function () { dlg.close(); });
   dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
 

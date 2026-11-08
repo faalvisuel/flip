@@ -4,7 +4,7 @@
 Flip décline une composition After Effects en 9:16, 4:5, 1:1 ou 16:9 en un clic, sans rien couper ni dénaturer.
 
 - Site : https://faalvisuel.github.io/flip/
-- Télécharger la bêta : [downloads/Flip_v4.1_beta.zip](downloads/Flip_v4.1_beta.zip)
+- Obtenir la bêta : paiement Wave sur le site, puis lien de téléchargement envoyé après vérification
 
 ## Installation
 1. Mac : double-clic sur `Installer Flip (Mac).command` (si macOS bloque : clic droit > Ouvrir).

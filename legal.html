@@ -18,14 +18,15 @@
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--page); color: var(--ink); font: 16px/1.65 var(--ui); -webkit-font-smoothing: antialiased; }
-  .shell { max-width: 1100px; margin: 0 auto; padding: 18px max(16px, env(safe-area-inset-left, 0px)) 40px; }
-  .sheet { background: var(--paper); border-radius: 28px; overflow: hidden; }
-  nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 28px; border-bottom: 1px solid var(--line); }
+  body { background: var(--paper); }
+  .shell { width: 100%; }
+  .sheet { background: var(--paper); }
+  nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px max(28px, calc((100% - 1200px) / 2)); border-bottom: 1px solid var(--line); }
   .brand { display: flex; align-items: center; gap: 8px; font: 700 22px/1 var(--display); letter-spacing: -.8px; color: var(--ink); text-decoration: none; }
   .brand svg { width: 24px; height: 24px; }
   .back { font-size: 14px; color: var(--ink-2); text-decoration: none; }
   .back:hover { color: var(--red-ink); }
-  .wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding: 48px 40px 64px; }
+  .wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding: 48px 40px 64px; max-width: 1200px; margin: 0 auto; }
   aside { position: sticky; top: 24px; align-self: start; display: flex; flex-direction: column; gap: 6px; }
   aside a { color: var(--ink-2); text-decoration: none; font-size: 14px; padding: 8px 12px; border-radius: 10px; }
   aside a:hover { background: #fff; color: var(--red-ink); }
@@ -42,7 +43,7 @@
   .card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; margin: 8px 0 12px; }
   .card p { margin: 2px 0; }
   .card b { color: var(--ink); }
-  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 18px 8px 0; color: var(--muted); font-size: 13px; }
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 22px max(24px, calc((100% - 1200px) / 2)) 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
   @media (max-width: 820px) {
     .wrap { grid-template-columns: 1fr; padding: 32px 20px 48px; gap: 20px; }
     aside { position: static; flex-direction: row; flex-wrap: wrap; }
@@ -105,11 +106,11 @@
           <h3>4. Paiement</h3>
           <p>Le paiement se fait par Wave, via le lien de paiement marchand affiché sur le site. Wave traite le paiement selon ses propres conditions ; l'éditeur n'a jamais accès à tes identifiants ou à ton code Wave.</p>
           <h3>5. Livraison</h3>
-          <p>Flip est livré immédiatement par téléchargement sur ce site après le paiement. Si tu ne parviens pas à le télécharger, contacte l'éditeur sur WhatsApp avec la preuve de paiement Wave : le fichier te sera envoyé directement.</p>
+          <p>Après le paiement, tu envoies ton reçu Wave sur WhatsApp. Dès que le paiement est vérifié, tu reçois un lien de téléchargement de Flip, en général dans la journée.</p>
           <h3>6. Mises à jour</h3>
           <p>Les correctifs de la version bêta 4.x sont fournis sans frais supplémentaires pendant toute la durée de la bêta. Les versions majeures futures pourront être vendues séparément.</p>
           <h3>7. Rétractation et remboursement</h3>
-          <p>Flip étant un contenu numérique livré immédiatement, tu acceptes que sa livraison commence dès le paiement, ce qui met fin au droit de rétractation une fois le téléchargement effectué.</p>
+          <p>Flip étant un contenu numérique, tu acceptes que sa livraison commence dès la vérification du paiement, ce qui met fin au droit de rétractation une fois le téléchargement effectué.</p>
           <p>Si Flip ne fonctionne pas du tout sur ta configuration compatible et que le problème ne peut pas être corrigé, l'éditeur te rembourse sur simple demande dans les 14 jours suivant l'achat.</p>
           <h3>8. Garantie et responsabilité</h3>
           <p>Flip est fourni en version bêta, en l'état. Il travaille sur une copie de ta composition et ne modifie pas l'original, mais il est conseillé d'enregistrer ton projet avant chaque conversion. L'éditeur ne peut être tenu responsable d'une perte de données, d'un plantage d'After Effects ou d'un retard de livraison d'un projet client. Sa responsabilité est en tout état de cause limitée au montant payé.</p>
