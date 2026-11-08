@@ -237,8 +237,12 @@
     waveBtn.removeAttribute("aria-disabled");
     waveBtn.addEventListener("click", function (e) { e.preventDefault(); payHelp.hidden = !payHelp.hidden; });
     payNote.textContent = "Paiement par transfert Wave.";
-    payHelp.innerHTML = "<b>Comment payer</b><ol><li>Ouvre Wave et envoie <b>500 FCFA</b> au <b></b>.</li><li>Mets « Flip » en motif.</li><li>Envoie la capture du paiement au même numéro sur WhatsApp.</li></ol>";
+    payHelp.innerHTML = "<b>Comment payer</b><ol><li>Ouvre Wave et envoie <b>500 FCFA</b> au <b></b> <button class=\"copy\" type=\"button\" id=\"copyWave\">Copier</button></li><li>Mets « Flip » en motif.</li><li>Envoie la capture du paiement au même numéro sur WhatsApp.</li></ol>";
     payHelp.querySelector("ol li b:nth-of-type(2)").textContent = WAVE_NUMBER;
+    document.getElementById("copyWave").addEventListener("click", function () {
+      var b = this, num = WAVE_NUMBER.replace(/\s/g, "");
+      try { navigator.clipboard.writeText(num).then(function () { b.textContent = "Copié"; setTimeout(function () { b.textContent = "Copier"; }, 1500); }, function () {}); } catch (e) {}
+    });
   } else {
     waveBtn.addEventListener("click", function (e) { e.preventDefault(); });
   }
