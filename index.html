@@ -11,252 +11,381 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
 <style>
-  /* Une seule ambiance, la charte Flip : noir, bordeaux, rouge. Colonne centrale, vidéo en vedette. */
+  /* Page claire et arrondie (réf. LightReach / Area), couleurs Flip : noir, bordeaux, rouge.
+     Le mot clé du titre est encadré comme un calque sélectionné dans After Effects. */
   :root {
-    --bg: #0A0A0B;
-    --surface: #121214;
-    --line: #26262B;
-    --text: #F4F4F5;
-    --muted: #A1A1AA;
+    --page: #EFEDEE;
+    --paper: #FAF9F9;
+    --ink: #0A0A0B;
+    --ink-2: #3F3A3C;
+    --muted: #6E6668;
+    --line: #DCD7D8;
     --red: #E0213F;
+    --red-ink: #B5162F;
     --bordeaux: #7A1024;
-    --night: #2A0710;
-    --ok: #3DD68C;
+    --night: #1A0509;
+    --night-2: #2A0710;
+    --on-dark: #F4F4F5;
+    --on-dark-muted: #C9B7BB;
     --display: "Space Grotesk", "Inter", system-ui, sans-serif;
     --ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-    color-scheme: dark;
+    --r-xl: 28px; --r-lg: 20px; --r-md: 14px;
+    color-scheme: light;
   }
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: radial-gradient(90% 50% at 50% -10%, rgba(122, 16, 36, .45), transparent 70%), var(--bg);
-    color: var(--text);
-    font: 16px/1.6 var(--ui);
-    -webkit-font-smoothing: antialiased;
-  }
-  .wrap {
-    max-width: 980px; margin: 0 auto;
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 16px/1.6 var(--ui); -webkit-font-smoothing: antialiased; }
+  img, video { max-width: 100%; }
+  .shell {
+    max-width: 1200px; margin: 0 auto;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
-    padding-block: 28px 64px;
-    display: flex; flex-direction: column; gap: 56px;
+    padding-block: 18px 40px;
   }
-  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .brand { display: flex; align-items: center; gap: 10px; font: 700 26px/1 var(--display); letter-spacing: -1px; }
-  .brand svg { width: 30px; height: 30px; }
-  .chip { font: 500 12px/1 var(--display); letter-spacing: .6px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 7px 11px; }
+  .sheet { background: var(--paper); border-radius: var(--r-xl); overflow: hidden; }
 
-  .hero { display: flex; flex-direction: column; gap: 20px; }
-  h1 { margin: 0; font: 700 clamp(40px, 7vw, 72px)/1.02 var(--display); letter-spacing: -2px; text-wrap: balance; }
-  h1 span { color: var(--red); }
-  .lead { margin: 0; max-width: 62ch; color: var(--muted); font-size: 18px; }
-  .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-  .btn {
-    font: 700 16px/1 var(--display); letter-spacing: .2px; color: #fff; text-decoration: none;
-    border: 0; border-radius: 12px; padding: 17px 24px; cursor: pointer;
-    background: linear-gradient(135deg, var(--bordeaux), #B5162F 55%, var(--red));
-    box-shadow: 0 12px 30px -12px rgba(224, 33, 63, .7), inset 0 1px 0 rgba(255, 255, 255, .18);
-    display: inline-flex; align-items: center; gap: 10px;
+  /* Barre de navigation */
+  nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 28px; border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 8px; font: 700 22px/1 var(--display); letter-spacing: -.8px; color: var(--ink); text-decoration: none; }
+  .brand svg { width: 24px; height: 24px; }
+  .links { display: flex; gap: 22px; font-size: 14px; }
+  .links a { color: var(--ink-2); text-decoration: none; }
+  .links a:hover { color: var(--red-ink); }
+
+  /* Boutons pilule avec rond flèche */
+  .pill {
+    display: inline-flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer;
+    font: 600 15px/1 var(--display); border: 0; border-radius: 999px; padding: 6px 6px 6px 20px; min-height: 48px;
+    transition: transform .15s, filter .15s;
   }
-  .btn:hover { filter: brightness(1.08); }
-  .btn:disabled { filter: saturate(.4) brightness(.8); cursor: default; }
-  .btn:focus-visible, .ghost:focus-visible, .copy:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
-  .btn svg { width: 18px; height: 18px; }
-  .ghost { color: var(--text); text-decoration: none; font: 500 15px/1 var(--ui); padding: 16px 6px; border-bottom: 1px solid var(--line); }
-  .ghost:hover { border-color: var(--red); }
-  .meta { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .pill .dot { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+  .pill .dot svg { width: 16px; height: 16px; }
+  .pill:hover { transform: translateY(-1px); }
+  .pill:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+  .pill.primary { background: var(--ink); color: #fff; }
+  .pill.primary .dot { background: var(--red); color: #fff; }
+  .pill.light { background: #fff; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+  .pill.light .dot { background: var(--ink); color: #fff; }
+  .pill.red { background: var(--red); color: #fff; }
+  .pill.red .dot { background: #fff; color: var(--red); }
+  .pill.small { min-height: 42px; font-size: 14px; }
+  .pill.small .dot { width: 30px; height: 30px; }
 
-  .video { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #000; box-shadow: 0 30px 80px -40px rgba(224, 33, 63, .5); }
-  .video video { display: block; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #000; }
-  .caption { color: var(--muted); font-size: 14px; margin: 10px 2px 0; }
+  /* Hero */
+  .hero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; padding: 64px 24px 40px; }
+  .tag { display: inline-flex; align-items: center; gap: 8px; font: 600 12px/1 var(--display); letter-spacing: .3px; color: var(--bordeaux); background: #F8DCE1; border: 1px solid #F0B9C3; border-radius: 999px; padding: 8px 12px; }
+  .tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--red); display: block; }
+  h1 { margin: 0; font: 700 clamp(44px, 7.4vw, 92px)/1 var(--display); letter-spacing: -.045em; text-wrap: balance; max-width: 15ch; }
+  .sel { position: relative; display: inline-block; padding: 0 .12em; margin: 0 .04em; color: var(--red); background: rgba(224, 33, 63, .08); outline: 2px solid var(--red); }
+  .sel::before, .sel::after, .sel b::before, .sel b::after { content: ""; position: absolute; width: 11px; height: 11px; background: #fff; border: 2px solid var(--red); }
+  .sel::before { left: -6px; top: -6px; } .sel::after { right: -6px; top: -6px; }
+  .sel b::before { left: -6px; bottom: -6px; } .sel b::after { right: -6px; bottom: -6px; }
+  .sel b { font: inherit; }
+  .lead { margin: 0; max-width: 56ch; color: var(--ink-2); font-size: 18px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .price-note { margin: 0; font-size: 14px; color: var(--muted); }
+  .price-note strong { color: var(--ink); font-family: var(--display); }
 
-  section { display: flex; flex-direction: column; gap: 20px; }
-  h2 { margin: 0; font: 700 30px/1.1 var(--display); letter-spacing: -.8px; }
-  .label { margin: 0; font: 500 12px/1 var(--display); letter-spacing: 2px; text-transform: uppercase; color: var(--red); }
+  /* Vidéo dans un cadre épais, comme la bande photo de la réf. */
+  .stage { padding: 8px 24px 0; }
+  .frame {
+    position: relative; max-width: 1040px; margin: 0 auto; border-radius: var(--r-xl); padding: 10px;
+    background: var(--red); box-shadow: 14px 16px 0 var(--night);
+  }
+  .frame video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 20px; background: #000; }
+  .chip { position: absolute; font: 600 15px/1.2 var(--display); border-radius: 16px; padding: 12px 16px; box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .45); }
+  .chip.a { left: -18px; top: 18%; background: #fff; color: var(--ink); transform: rotate(-6deg); }
+  .chip.b { right: -16px; top: 8%; background: var(--night); color: #fff; border-radius: 999px; transform: rotate(5deg); }
+  .chip.c { right: 9%; bottom: -22px; background: #F8DCE1; color: var(--bordeaux); transform: rotate(-3deg); }
+  .caption { text-align: center; color: var(--muted); font-size: 13px; margin: 34px 0 0; }
 
+  /* Bande des formats */
+  .formats { padding: 54px 24px 60px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .formats p { margin: 0; color: var(--ink-2); font-weight: 500; }
+  .formats ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 30px; }
+  .formats li { display: flex; align-items: center; gap: 10px; font: 600 17px/1 var(--display); color: var(--ink-2); }
+  .formats li i { display: block; border: 2px solid var(--ink-2); border-radius: 4px; }
+
+  /* Section sombre */
+  .dark { margin: 0 24px; background: var(--night); color: var(--on-dark); border-radius: var(--r-xl); padding: 56px 48px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; }
+  .dark .tag { background: rgba(224, 33, 63, .18); border-color: rgba(224, 33, 63, .45); color: #FF9AAB; }
+  h2 { margin: 0; font: 700 clamp(32px, 4vw, 48px)/1.05 var(--display); letter-spacing: -.035em; text-wrap: balance; }
+  .feat { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 28px; }
+  .feat li { min-width: 0; }
+  .feat b { display: block; font: 600 17px/1.3 var(--display); margin-bottom: 4px; }
+  .feat span { color: var(--on-dark-muted); font-size: 14.5px; }
+  .stats { display: flex; flex-direction: column; gap: 12px; padding: 10px; background: var(--red); border-radius: var(--r-lg); align-self: start; }
+  .stat { background: #fff; color: var(--ink); border-radius: var(--r-md); padding: 22px; text-align: center; }
+  .stat b { display: block; font: 700 40px/1 var(--display); letter-spacing: -1.5px; }
+  .stat span { color: var(--muted); font-size: 14px; }
+
+  /* Installation */
+  .install { padding: 64px 24px 24px; display: flex; flex-direction: column; gap: 22px; max-width: 1100px; margin: 0 auto; }
+  .head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 12px; }
   .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; counter-reset: s; }
-  .steps li { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 8px; min-width: 0; counter-increment: s; }
-  .steps li::before { content: counter(s); font: 700 14px/1 var(--display); color: var(--red); width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(224, 33, 63, .5); display: grid; place-items: center; }
-  .steps b { font: 600 17px/1.3 var(--ui); }
-  .steps p { margin: 0; color: var(--muted); font-size: 14.5px; }
-  code { font: 500 13px/1.4 ui-monospace, "SF Mono", Menlo, monospace; background: #1B1B1F; border: 1px solid var(--line); padding: 2px 6px; border-radius: 6px; color: var(--text); word-break: break-all; }
+  .steps li { background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px; display: flex; flex-direction: column; gap: 8px; min-width: 0; counter-increment: s; }
+  .steps li::before { content: counter(s); width: 34px; height: 34px; border-radius: 50%; background: var(--ink); color: #fff; font: 700 15px/1 var(--display); display: grid; place-items: center; }
+  .steps b { font: 600 18px/1.3 var(--display); }
+  .steps p { margin: 0; color: var(--ink-2); font-size: 14.5px; }
+  code { font: 500 13px/1.4 ui-monospace, "SF Mono", Menlo, monospace; background: #F2EEEF; border: 1px solid var(--line); padding: 2px 6px; border-radius: 6px; color: var(--ink); word-break: break-word; }
 
-  .features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; }
-  .features div { padding: 18px 0; border-top: 1px solid var(--line); min-width: 0; }
-  .features b { display: block; font: 700 18px/1.3 var(--display); margin-bottom: 4px; }
-  .features p { margin: 0; color: var(--muted); font-size: 15px; }
-
-  .feedback { background: linear-gradient(180deg, rgba(122, 16, 36, .22), rgba(42, 7, 16, .12)); border: 1px solid rgba(224, 33, 63, .3); border-radius: 16px; padding: 26px; display: flex; flex-direction: column; gap: 14px; }
-  .feedback ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
-  .feedback li { color: var(--text); }
-  .logs { display: flex; flex-direction: column; gap: 8px; }
+  /* Retours : carte en pointillés comme la réf. Area */
+  .feedback { margin: 26px auto 0; max-width: 1100px; padding: 0 24px 64px; }
+  .dash { border: 2px dashed #C9C1C3; border-radius: var(--r-lg); padding: 28px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+  .dash ul { margin: 12px 0 0; padding-left: 20px; color: var(--ink-2); display: flex; flex-direction: column; gap: 4px; }
+  .logs { display: flex; flex-direction: column; gap: 10px; align-self: center; }
   .logrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; color: var(--muted); }
-  .copy { font: 500 12px/1 var(--ui); color: var(--text); background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+  .copy { font: 500 12px/1 var(--ui); color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 7px 12px; cursor: pointer; }
   .copy:hover { border-color: var(--red); }
+  .copy:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 
-  footer { color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-top: 1px solid var(--line); padding-top: 18px; }
 
-  @media (max-width: 760px) {
+  /* Retours de la bêta */
+  .voices { padding: 8px 24px 56px; max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+  .vgrid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+  .vcard { background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .vcard blockquote { margin: 0; font: 500 19px/1.45 var(--display); letter-spacing: -.2px; color: var(--ink); }
+  .vcard blockquote::before { content: "\201C"; display: block; font: 700 46px/.6 var(--display); color: var(--red); margin-bottom: 10px; }
+  .who { display: flex; align-items: center; gap: 12px; margin-top: auto; }
+  .av { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: var(--night); color: #fff; font: 700 15px/1 var(--display); flex: none; }
+  .who b { display: block; font: 600 15px/1.2 var(--display); color: var(--ink); }
+  .vcard.open .pill { align-self: flex-start; }
+  .who span { font-size: 13px; color: var(--muted); }
+  .vcard.open { background: transparent; border: 2px dashed #C9C1C3; justify-content: center; }
+  .vcard.open p { margin: 0; color: var(--ink-2); font-size: 14.5px; }
+  .vcard.open b { font: 600 18px/1.3 var(--display); }
+  .legal-links a { color: var(--muted); text-decoration: none; margin-left: 14px; }
+  .legal-links a:hover { color: var(--red-ink); }
+
+  /* Bas de page */
+  .final { background: var(--red); color: #fff; margin: 0 24px 24px; border-radius: var(--r-xl); padding: 44px 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
+  .final h2 { color: #fff; }
+  .final p { margin: 8px 0 0; color: #FFE1E6; }
+  .final .pill.primary .dot { background: #fff; color: var(--red); }
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 18px 8px 0; color: var(--muted); font-size: 13px; }
+
+  /* Fenêtre après clic sur Essayer */
+  dialog { border: 0; border-radius: var(--r-xl); padding: 0; max-width: 460px; width: calc(100% - 32px); background: var(--paper); color: var(--ink); box-shadow: 0 40px 80px -20px rgba(26, 5, 9, .5); }
+  dialog::backdrop { background: rgba(10, 10, 11, .55); }
+  .dlg { padding: 28px; display: flex; flex-direction: column; gap: 14px; }
+  .dlg h3 { margin: 0; font: 700 26px/1.1 var(--display); letter-spacing: -.8px; }
+  .dlg p { margin: 0; color: var(--ink-2); }
+  .dlg ol { margin: 0; padding-left: 20px; color: var(--ink-2); display: flex; flex-direction: column; gap: 6px; }
+  .dlg .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .close { align-self: flex-end; border: 0; background: transparent; font: 500 14px/1 var(--ui); color: var(--muted); cursor: pointer; padding: 6px; }
+  .close:hover { color: var(--ink); }
+
+  @media (max-width: 860px) {
+    .links { display: none; }
+    .dark { grid-template-columns: 1fr; padding: 40px 24px; margin: 0 12px; }
+    .feat { grid-template-columns: 1fr; }
     .steps { grid-template-columns: 1fr; }
-    .features { grid-template-columns: 1fr; }
+    .dash { grid-template-columns: 1fr; }
+    .vgrid { grid-template-columns: 1fr; }
+    .final { margin: 0 12px 12px; padding: 32px 24px; }
+    .chip.a { left: 8px; } .chip.b { right: 8px; }
+    .chip { font-size: 12px; padding: 8px 10px; }
+    .stage { padding: 8px 8px 0; }
+    nav { padding: 14px 16px; }
   }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
-
-  .price { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 30px; }
-  .price .amount { font: 700 64px/1 var(--display); letter-spacing: -2px; }
-  .price .amount small { font: 500 20px/1 var(--display); color: var(--muted); letter-spacing: 0; margin-left: 6px; }
-  .price p { margin: 0; color: var(--muted); }
-  .price .tag { display: inline-block; font: 500 12px/1 var(--display); letter-spacing: 1.5px; text-transform: uppercase; color: var(--red); border: 1px solid rgba(224, 33, 63, .45); border-radius: 999px; padding: 6px 10px; }
-  .pay { display: flex; flex-direction: column; gap: 10px; align-items: stretch; min-width: 260px; }
-  .wave { font: 700 17px/1 var(--display); color: #0A0A0B; background: #1DC8FF; border: 0; border-radius: 12px; padding: 18px 22px; text-decoration: none; text-align: center; cursor: pointer; display: inline-flex; justify-content: center; align-items: center; gap: 10px; }
-  .wave:hover { filter: brightness(1.06); }
-  .wave:focus-visible { outline: 2px solid #1DC8FF; outline-offset: 3px; }
-  .wave[aria-disabled="true"] { background: #2A2A30; color: var(--muted); cursor: default; }
-  .paynote { font-size: 13px; color: var(--muted); text-align: center; }
-  .payhelp { font-size: 14px; color: var(--text); background: #18181B; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
-  .payhelp ol { margin: 6px 0 0; padding-left: 18px; }
-  @media (max-width: 760px) { .price { grid-template-columns: 1fr; } .pay { min-width: 0; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .pill { transition: none; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="brand">
-      <svg viewBox="0 0 120 120" aria-hidden="true">
-        <path d="M28 18 H98 L88 36 H28 Z" fill="#E0213F"></path>
-        <path d="M28 46 H80 L70 64 H28 Z" fill="#F4F4F5"></path>
-        <path d="M28 74 H50 V104 H28 Z" fill="#F4F4F5"></path>
-      </svg>
-      flip
-    </div>
-    <span class="chip">Bêta 4.1 · After Effects</span>
-  </header>
-
-  <div class="hero">
-    <h1>Change de format.<br><span>Garde tout.</span></h1>
-    <p class="lead">Flip décline ta compo After Effects en 9:16, 4:5, 1:1 ou 16:9 en un clic. Il repère tes textes, images, précomps et groupes de Nulls, les réorganise et les centre dans le nouveau format, sans rien couper ni dénaturer.</p>
-    <div class="actions">
-      <a class="btn" id="dl" href="downloads/Flip_v4.1_beta.zip" download>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14"></path></svg>
-        Télécharger Flip
+<div class="shell">
+  <div class="sheet">
+    <nav>
+      <a class="brand" href="#">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M28 18 H98 L88 36 H28 Z" fill="#E0213F"/><path d="M28 46 H80 L70 64 H28 Z" fill="#0A0A0B"/><path d="M28 74 H50 V104 H28 Z" fill="#0A0A0B"/></svg>
+        flip
       </a>
-      <a class="ghost" href="#demo">Voir la démo</a>
-      <a class="ghost" href="#acheter">Acheter · 500 FCFA</a>
-    </div>
-    <p class="meta">Flip_v4.1_beta.zip · 4,3 Mo · plugin, installeurs Mac et Windows, vidéo démo</p>
-  </div>
-
-  <div id="demo">
-    <div class="video">
-      <video id="vid" controls playsinline preload="metadata" poster="assets/poster.jpg">
-        <source src="assets/Flip_demo.mp4" type="video/mp4">
-      </video>
-    </div>
-    <p class="caption">Démo : une compo convertie en 9:16 depuis le panneau Flip, dans After Effects 2026.</p>
-  </div>
-
-
-  <section id="acheter">
-    <p class="label">Acheter Flip</p>
-    <div class="price">
-      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
-        <span class="tag" style="align-self:flex-start">Prix de lancement</span>
-        <div class="amount">500<small>FCFA</small></div>
-        <p>Paiement unique par Wave. C'est un prix de test pendant la bêta : il augmentera avec les prochaines versions.</p>
+      <div class="links">
+        <a href="#demo">Démo</a>
+        <a href="#pourquoi">Pourquoi Flip</a>
+        <a href="#installation">Installation</a>
+        <a href="#avis">Avis</a>
+        <a href="#retours">Retours</a>
       </div>
-      <div class="pay">
-        <a class="wave" id="waveBtn" href="#acheter" aria-disabled="true">Payer 500 F avec Wave</a>
-        <p class="paynote" id="payNote">Le paiement Wave arrive très bientôt.</p>
-        <div class="payhelp" id="payHelp" hidden></div>
+      <a class="pill red small try" href="#essayer">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+    </nav>
+
+    <header class="hero" id="essayer">
+      <span class="tag"><i></i>Bêta 4.1 · Plugin After Effects</span>
+      <h1>Change de format. Garde <span class="sel"><b>tout.</b></span></h1>
+      <p class="lead">Flip décline ta compo en 9:16, 4:5, 1:1 ou 16:9 en un clic. Textes, images, précomps et groupes de Nulls sont réorganisés et centrés, sans rien couper ni dénaturer.</p>
+      <div class="cta">
+        <a class="pill primary try" href="#essayer">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+        <a class="pill light" href="#demo">Voir la démo<span class="dot"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
       </div>
+      <p class="price-note"><strong>500 FCFA</strong> · prix de la bêta, il augmentera avec les prochaines versions.</p>
+    </header>
+
+    <div class="stage" id="demo">
+      <div class="frame">
+        <video controls playsinline preload="metadata" poster="assets/poster.jpg">
+          <source src="assets/Flip_demo.mp4" type="video/mp4">
+        </video>
+        <span class="chip a">16:9 → 9:16</span>
+        <span class="chip b">Rien n'est coupé</span>
+        <span class="chip c">Précomps, Nulls et 3D</span>
+      </div>
+      <p class="caption">Démo : une compo convertie en 9:16 depuis le panneau Flip, dans After Effects 2026.</p>
     </div>
-  </section>
 
-  <section>
-    <p class="label">Installation</p>
-    <h2>Trois étapes</h2>
-    <ol class="steps">
-      <li><b>Lance l'installeur</b><p>Mac : double-clique sur <code>Installer Flip (Mac).command</code>. Si macOS le bloque : clic droit, Ouvrir, Ouvrir.<br>Windows : <code>Installer Flip (Windows).bat</code>.</p></li>
-      <li><b>Redémarre After Effects</b><p>Puis ouvre <code>Fenêtre &gt; Extensions &gt; Flip</code>. Le panneau peut se ranger avec les autres.</p></li>
-      <li><b>Convertis</b><p>Sélectionne ta compo, choisis le format de sortie et clique sur Convertir. Tout s'annule avec Cmd/Ctrl + Z.</p></li>
-    </ol>
-  </section>
-
-  <section>
-    <p class="label">Ce que fait Flip</p>
-    <h2>Pensé pour les vrais projets</h2>
-    <div class="features">
-      <div><b>Rien n'est coupé</b><p>Chaque bloc est calé dans sa case. Ce qui sortait du cadre d'origine reste caché, rien ne se superpose.</p></div>
-      <div><b>Ton original reste intact</b><p>Flip travaille sur une copie de la compo et de ses précomps.</p></div>
-      <div><b>Précomps, Nulls, caches</b><p>Les groupes parentés et les caches de suivi bougent ensemble ; les précomps plein écran sont converties aussi.</p></div>
-      <div><b>Scènes 3D</b><p>Les calques 3D ne bougent pas : la caméra est recentrée et les fonds s'agrandissent pour couvrir le cadre.</p></div>
-      <div><b>Plus de bandes noires</b><p>Les fonds remplissent tout le nouveau format par défaut.</p></div>
-      <div><b>Facile à retoucher</b><p>Ajuste à la main en déplaçant les calques « Flip · bloc » ajoutés dans la copie.</p></div>
+    <div class="formats">
+      <p>Un seul projet, tous les formats</p>
+      <ul>
+        <li><i style="width:30px;height:17px"></i>16:9</li>
+        <li><i style="width:13px;height:23px"></i>9:16</li>
+        <li><i style="width:18px;height:22px"></i>4:5</li>
+        <li><i style="width:20px;height:20px"></i>1:1</li>
+        <li><i style="width:20px;height:20px;border-style:dashed;border-radius:50%"></i>Auto</li>
+      </ul>
     </div>
-  </section>
 
-  <section class="feedback">
-    <p class="label">Ton retour</p>
-    <h2>Teste-le sur tes projets</h2>
-    <p style="margin:0;color:var(--muted)">C'est une bêta. Pour qu'on corrige vite, envoie-nous :</p>
-    <ul>
-      <li>ta version d'After Effects et ton système (Mac ou Windows) ;</li>
-      <li>le format de départ et le format choisi ;</li>
-      <li>une capture du résultat, et de l'original si possible ;</li>
-      <li>ce qui cloche : élément coupé, décalé, superposé, disparu, fond noir… ;</li>
-      <li>le message d'erreur du panneau s'il y en a un, et le journal de Flip :</li>
-    </ul>
-    <div class="logs">
-      <div class="logrow">Mac <code id="logMac">~/Library/Application Support/Flip_log.txt</code><button class="copy" type="button" data-copy="logMac">Copier</button></div>
-      <div class="logrow">Windows <code id="logWin">%APPDATA%\Flip_log.txt</code><button class="copy" type="button" data-copy="logWin">Copier</button></div>
+    <section class="dark" id="pourquoi">
+      <div>
+        <span class="tag"><i></i>Pourquoi Flip</span>
+        <h2 style="margin-top:16px">Pensé pour les vrais projets.</h2>
+        <ul class="feat">
+          <li><b>Rien n'est coupé</b><span>Chaque bloc est calé dans sa case : aucun élément ne déborde ni ne se superpose.</span></li>
+          <li><b>Ton original reste intact</b><span>Flip travaille sur une copie de la compo et de ses précomps.</span></li>
+          <li><b>Nulls, précomps, caches</b><span>Les groupes parentés bougent ensemble, les précomps plein écran sont converties aussi.</span></li>
+          <li><b>Scènes 3D</b><span>La caméra est recentrée, les fonds s'agrandissent pour couvrir le cadre.</span></li>
+        </ul>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>4</b><span>formats + mode Auto</span></div>
+        <div class="stat"><b>1 clic</b><span>par conversion</span></div>
+        <div class="stat"><b>Cmd + Z</b><span>pour tout annuler</span></div>
+      </div>
+    </section>
+
+    <section class="voices" id="avis">
+      <div class="head">
+        <div>
+          <span class="tag"><i></i>Retours de la bêta</span>
+          <h2 style="margin-top:14px">Ce qu'en disent les motion designers.</h2>
+        </div>
+        <p style="margin:0;color:var(--muted);font-size:14px;max-width:34ch">Seuls de vrais retours de testeurs sont publiés ici, avec leur accord.</p>
+      </div>
+      <div class="vgrid">
+        <figure class="vcard" style="margin:0">
+          <blockquote>J'ai créé Flip parce que je passais des heures à refaire chaque compo en 9:16. Maintenant, je convertis et je retouche seulement les détails.</blockquote>
+          <figcaption class="who"><span class="av">FV</span><span><b>faalvisuel</b><span>Créateur de Flip · motion designer</span></span></figcaption>
+        </figure>
+        <div class="vcard open">
+          <b>Ton avis ici</b>
+          <p>Tu as testé Flip sur un vrai projet ? Envoie ton retour et une capture sur WhatsApp, on l'ajoute avec ton accord.</p>
+          <a class="pill light small" href="https://wa.me/221774847284" target="_blank" rel="noopener">Envoyer mon avis<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+        </div>
+        <div class="vcard open">
+          <b>Bientôt d'autres retours</b>
+          <p>Les premiers testeurs sont en train de convertir leurs projets. Leurs avis arrivent ici au fil de la bêta.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="install" id="installation">
+      <div class="head">
+        <div>
+          <span class="tag"><i></i>Installation</span>
+          <h2 style="margin-top:14px">Prêt en trois étapes.</h2>
+        </div>
+        <p style="margin:0;color:var(--muted);font-size:14px">After Effects 2019 et plus récent · macOS et Windows</p>
+      </div>
+      <ol class="steps">
+        <li><b>Lance l'installeur</b><p>Mac : double-clique sur <code>Installer Flip (Mac).command</code> (si macOS bloque : clic droit, Ouvrir). Windows : <code>Installer Flip (Windows).bat</code>.</p></li>
+        <li><b>Redémarre After Effects</b><p>Puis ouvre <code>Fenêtre &gt; Extensions &gt; Flip</code>. Le panneau se range avec les autres.</p></li>
+        <li><b>Convertis</b><p>Sélectionne ta compo, choisis le format de sortie et clique sur Convertir.</p></li>
+      </ol>
+    </section>
+
+    <section class="feedback" id="retours">
+      <div class="dash">
+        <div>
+          <span class="tag"><i></i>Ton retour</span>
+          <h2 style="margin-top:14px;font-size:clamp(26px,3vw,34px)">Dis-nous ce qui cloche.</h2>
+          <ul>
+            <li>ta version d'After Effects et ton système ;</li>
+            <li>le format de départ et le format choisi ;</li>
+            <li>une capture du résultat et de l'original ;</li>
+            <li>le message d'erreur du panneau, s'il y en a un.</li>
+          </ul>
+        </div>
+        <div class="logs">
+          <p style="margin:0;font:600 15px/1.3 var(--display)">Joins aussi le journal de Flip :</p>
+          <div class="logrow">Mac <code id="logMac">~/Library/Application Support/Flip_log.txt</code><button class="copy" type="button" data-copy="logMac">Copier</button></div>
+          <div class="logrow">Windows <code id="logWin">%APPDATA%\Flip_log.txt</code><button class="copy" type="button" data-copy="logWin">Copier</button></div>
+          <div class="logrow">WhatsApp <code id="wa">+221 77 484 72 84</code><button class="copy" type="button" data-copy="wa">Copier</button></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="final">
+      <div>
+        <h2>Essaie Flip sur tes projets.</h2>
+        <p>500 FCFA pendant la bêta. Le prix augmentera avec les prochaines versions.</p>
+      </div>
+      <a class="pill primary try" href="#essayer">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
     </div>
-  </section>
-
+  </div>
   <footer>
     <span>Flip · bêta 4.1 · novembre 2026</span>
-    <span>After Effects 2019 et plus récent · macOS et Windows</span>
+    <span class="legal-links">Plugin pour Adobe After Effects<a href="legal.html#mentions">Mentions légales</a><a href="legal.html#cgv">CGV</a><a href="legal.html#confidentialite">Confidentialité</a></span>
   </footer>
 </div>
 
+<dialog id="buy" aria-labelledby="buyTitle">
+  <div class="dlg">
+    <button class="close" type="button" id="buyClose">Fermer</button>
+    <h3 id="buyTitle">Paie 500 FCFA avec Wave</h3>
+    <ol>
+      <li>Wave s'ouvre dans un nouvel onglet avec le montant déjà indiqué.</li>
+      <li>Valide le paiement de <b>500 FCFA</b>.</li>
+      <li>Reviens ici et télécharge Flip.</li>
+    </ol>
+    <div class="row">
+      <a class="pill red" id="waveGo" href="#" target="_blank" rel="noopener">Payer avec Wave<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+      <a class="pill light" id="dlAfter" href="downloads/Flip_v4.1_beta.zip" download hidden>Télécharger Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/></svg></span></a>
+    </div>
+    <p style="font-size:13px;color:var(--muted)">En payant, tu acceptes les <a href="legal.html#cgv" style="color:var(--ink)">conditions générales de vente</a>. Prix de la bêta, il augmentera avec les prochaines versions. Un souci de paiement ? WhatsApp au +221 77 484 72 84.</p>
+  </div>
+</dialog>
+
 <script>
 (function () {
-
-  // ---- Paiement Wave : renseigner UN des deux champs ----
-  // WAVE_LINK   : lien de paiement Wave Business (ex. https://pay.wave.com/m/XXXX/c/sn/?amount=500)
-  // WAVE_NUMBER : numéro Wave qui reçoit les paiements (ex. "+221 77 000 00 00")
   var WAVE_LINK = "https://pay.wave.com/m/M_sn_epQ7lFDO_gRz/c/sn/?amount=500";
-  var WAVE_NUMBER = "+221 77 484 72 84";
-  var waveBtn = document.getElementById("waveBtn"), payNote = document.getElementById("payNote"), payHelp = document.getElementById("payHelp");
-  if (WAVE_LINK) {
-    waveBtn.href = WAVE_LINK; waveBtn.target = "_blank"; waveBtn.rel = "noopener";
-    waveBtn.removeAttribute("aria-disabled");
-    payNote.textContent = "Tu seras redirigé vers Wave pour payer 500 FCFA.";
-  } else if (WAVE_NUMBER) {
-    waveBtn.removeAttribute("aria-disabled");
-    waveBtn.addEventListener("click", function (e) { e.preventDefault(); payHelp.hidden = !payHelp.hidden; });
-    payNote.textContent = "Paiement par transfert Wave.";
-    payHelp.innerHTML = "<b>Comment payer</b><ol><li>Ouvre Wave et envoie <b>500 FCFA</b> au <b></b> <button class=\"copy\" type=\"button\" id=\"copyWave\">Copier</button></li><li>Mets « Flip » en motif.</li><li>Envoie la capture du paiement au même numéro sur WhatsApp.</li></ol>";
-    payHelp.querySelector("ol li b:nth-of-type(2)").textContent = WAVE_NUMBER;
-    document.getElementById("copyWave").addEventListener("click", function () {
-      var b = this, num = WAVE_NUMBER.replace(/\s/g, "");
-      try { navigator.clipboard.writeText(num).then(function () { b.textContent = "Copié"; setTimeout(function () { b.textContent = "Copier"; }, 1500); }, function () {}); } catch (e) {}
-    });
-  } else {
-    waveBtn.addEventListener("click", function (e) { e.preventDefault(); });
+  var dlg = document.getElementById("buy");
+  var go = document.getElementById("waveGo");
+  var dl = document.getElementById("dlAfter");
+  go.href = WAVE_LINK;
+
+  function openBuy(e) {
+    e.preventDefault();
+    if (dlg.showModal) dlg.showModal(); else window.open(WAVE_LINK, "_blank", "noopener");
   }
+  Array.prototype.forEach.call(document.querySelectorAll(".try"), function (a) { a.addEventListener("click", openBuy); });
+  go.addEventListener("click", function () {
+    dl.hidden = false;
+    go.querySelector("span") && (go.firstChild.textContent = "Rouvrir Wave");
+  });
+  document.getElementById("buyClose").addEventListener("click", function () { dlg.close(); });
+  dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+
   Array.prototype.forEach.call(document.querySelectorAll(".copy"), function (b) {
     b.addEventListener("click", function () {
       var el = document.getElementById(b.getAttribute("data-copy"));
       function selectIt() { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
       try {
-        navigator.clipboard.writeText(el.textContent).then(function () { b.textContent = "Copié"; setTimeout(function () { b.textContent = "Copier"; }, 1500); }, selectIt);
+        navigator.clipboard.writeText(el.textContent.replace(/^\+221 /, "+221")).then(function () { b.textContent = "Copié"; setTimeout(function () { b.textContent = "Copier"; }, 1500); }, selectIt);
       } catch (e) { selectIt(); }
     });
   });
 })();
 </script>
-
 </body>
 </html>
