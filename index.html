@@ -103,6 +103,21 @@
     .features { grid-template-columns: 1fr; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  .price { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 30px; }
+  .price .amount { font: 700 64px/1 var(--display); letter-spacing: -2px; }
+  .price .amount small { font: 500 20px/1 var(--display); color: var(--muted); letter-spacing: 0; margin-left: 6px; }
+  .price p { margin: 0; color: var(--muted); }
+  .price .tag { display: inline-block; font: 500 12px/1 var(--display); letter-spacing: 1.5px; text-transform: uppercase; color: var(--red); border: 1px solid rgba(224, 33, 63, .45); border-radius: 999px; padding: 6px 10px; }
+  .pay { display: flex; flex-direction: column; gap: 10px; align-items: stretch; min-width: 260px; }
+  .wave { font: 700 17px/1 var(--display); color: #0A0A0B; background: #1DC8FF; border: 0; border-radius: 12px; padding: 18px 22px; text-decoration: none; text-align: center; cursor: pointer; display: inline-flex; justify-content: center; align-items: center; gap: 10px; }
+  .wave:hover { filter: brightness(1.06); }
+  .wave:focus-visible { outline: 2px solid #1DC8FF; outline-offset: 3px; }
+  .wave[aria-disabled="true"] { background: #2A2A30; color: var(--muted); cursor: default; }
+  .paynote { font-size: 13px; color: var(--muted); text-align: center; }
+  .payhelp { font-size: 14px; color: var(--text); background: #18181B; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .payhelp ol { margin: 6px 0 0; padding-left: 18px; }
+  @media (max-width: 760px) { .price { grid-template-columns: 1fr; } .pay { min-width: 0; } }
 </style>
 </head>
 <body>
@@ -128,6 +143,7 @@
         Télécharger Flip
       </a>
       <a class="ghost" href="#demo">Voir la démo</a>
+      <a class="ghost" href="#acheter">Acheter · 500 FCFA</a>
     </div>
     <p class="meta">Flip_v4.1_beta.zip · 4,3 Mo · plugin, installeurs Mac et Windows, vidéo démo</p>
   </div>
@@ -140,6 +156,23 @@
     </div>
     <p class="caption">Démo : une compo convertie en 9:16 depuis le panneau Flip, dans After Effects 2026.</p>
   </div>
+
+
+  <section id="acheter">
+    <p class="label">Acheter Flip</p>
+    <div class="price">
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+        <span class="tag" style="align-self:flex-start">Prix de lancement</span>
+        <div class="amount">500<small>FCFA</small></div>
+        <p>Paiement unique par Wave. C'est un prix de test pendant la bêta : il augmentera avec les prochaines versions.</p>
+      </div>
+      <div class="pay">
+        <a class="wave" id="waveBtn" href="#acheter" aria-disabled="true">Payer 500 F avec Wave</a>
+        <p class="paynote" id="payNote">Le paiement Wave arrive très bientôt.</p>
+        <div class="payhelp" id="payHelp" hidden></div>
+      </div>
+    </div>
+  </section>
 
   <section>
     <p class="label">Installation</p>
@@ -189,6 +222,26 @@
 
 <script>
 (function () {
+
+  // ---- Paiement Wave : renseigner UN des deux champs ----
+  // WAVE_LINK   : lien de paiement Wave Business (ex. https://pay.wave.com/m/XXXX/c/sn/?amount=500)
+  // WAVE_NUMBER : numéro Wave qui reçoit les paiements (ex. "+221 77 000 00 00")
+  var WAVE_LINK = "";
+  var WAVE_NUMBER = "";
+  var waveBtn = document.getElementById("waveBtn"), payNote = document.getElementById("payNote"), payHelp = document.getElementById("payHelp");
+  if (WAVE_LINK) {
+    waveBtn.href = WAVE_LINK; waveBtn.target = "_blank"; waveBtn.rel = "noopener";
+    waveBtn.removeAttribute("aria-disabled");
+    payNote.textContent = "Tu seras redirigé vers Wave pour payer 500 FCFA.";
+  } else if (WAVE_NUMBER) {
+    waveBtn.removeAttribute("aria-disabled");
+    waveBtn.addEventListener("click", function (e) { e.preventDefault(); payHelp.hidden = !payHelp.hidden; });
+    payNote.textContent = "Paiement par transfert Wave.";
+    payHelp.innerHTML = "<b>Comment payer</b><ol><li>Ouvre Wave et envoie <b>500 FCFA</b> au <b></b>.</li><li>Mets « Flip » en motif.</li><li>Envoie la capture du paiement au même numéro sur WhatsApp.</li></ol>";
+    payHelp.querySelector("ol li b:nth-of-type(2)").textContent = WAVE_NUMBER;
+  } else {
+    waveBtn.addEventListener("click", function (e) { e.preventDefault(); });
+  }
   Array.prototype.forEach.call(document.querySelectorAll(".copy"), function (b) {
     b.addEventListener("click", function () {
       var el = document.getElementById(b.getAttribute("data-copy"));
