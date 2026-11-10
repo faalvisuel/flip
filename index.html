@@ -229,7 +229,7 @@
         <a class="pill primary try" href="#essayer">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
         <a class="pill light" href="#demo">Voir la démo<span class="dot"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
       </div>
-      <p class="price-note"><strong>500 FCFA</strong> · prix de la bêta, il augmentera avec les prochaines versions.</p>
+      <p class="price-note"><strong>2000 FCFA</strong> · prix de la bêta, il augmentera avec les prochaines versions.</p>
     </header>
 
     <div class="stage" id="demo">
@@ -337,7 +337,7 @@
     <div class="final">
       <div>
         <h2>Essaie Flip sur tes projets.</h2>
-        <p>500 FCFA pendant la bêta. Le prix augmentera avec les prochaines versions.</p>
+        <p>2000 FCFA pendant la bêta. Le prix augmentera avec les prochaines versions.</p>
       </div>
       <a class="pill primary try" href="#essayer">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
     </div>
@@ -351,15 +351,16 @@
 <dialog id="buy" aria-labelledby="buyTitle">
   <div class="dlg">
     <button class="close" type="button" id="buyClose">Fermer</button>
-    <h3 id="buyTitle">Paie 500 FCFA avec Wave</h3>
-    <ol>
-      <li>Tu es redirigé vers Wave avec le montant déjà indiqué. Valide le paiement de <b>500 FCFA</b>.</li>
+    <h3 id="buyTitle">Choisis ton moyen de paiement</h3>
+    <div class="row" style="flex-direction:column;align-items:stretch;gap:10px">
+      <a class="pill" id="gumroadGo" href="https://faalv.gumroad.com/l/gswjfo" target="_blank" rel="noopener" style="background:#000;color:#fff;justify-content:center">Acheter sur Gumroad<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+      <a class="pill red" id="waveGo" href="#" style="justify-content:center">Payer 2000 FCFA avec Wave<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+    </div>
+    <ol style="margin-top:14px">
+      <li>Avec Wave : tu es redirigé vers Wave avec le montant déjà indiqué. Valide le paiement de <b>2000 FCFA</b>.</li>
       <li>Tu reviens automatiquement sur le site.</li>
       <li>Le lien de téléchargement de Flip apparaît dès que le paiement est confirmé (quelques secondes).</li>
     </ol>
-    <div class="row">
-      <a class="pill red" id="waveGo" href="#">Payer avec Wave<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
-    </div>
     <p id="buyErr" hidden style="font-size:13px;color:#c0392b">Le paiement automatique est momentanément indisponible. <a id="proof" href="#" target="_blank" rel="noopener" style="color:var(--ink)">Envoie ton reçu Wave sur WhatsApp</a> et on te livre Flip à la main.</p>
     <p style="font-size:13px;color:var(--muted)">En payant, tu acceptes les <a href="legal.html#cgv" style="color:var(--ink)">conditions générales de vente</a>. Prix de la bêta, il augmentera avec les prochaines versions.</p>
   </div>
@@ -368,11 +369,11 @@
 <script>
 (function () {
   var FN_BASE = "https://mqgjwyqpibbthfgcthva.supabase.co/functions/v1";
-  var WAVE_LINK_FALLBACK = "https://pay.wave.com/m/M_sn_epQ7lFDO_gRz/c/sn/?amount=500";
+  var WAVE_LINK_FALLBACK = "https://pay.wave.com/m/M_sn_epQ7lFDO_gRz/c/sn/?amount=2000";
   var dlg = document.getElementById("buy");
   var go = document.getElementById("waveGo");
   var errBox = document.getElementById("buyErr");
-  var WA_PROOF = "https://wa.me/221774847284?text=" + encodeURIComponent("Bonjour, je viens de payer Flip (500 FCFA) avec Wave. Voici mon reçu :");
+  var WA_PROOF = "https://wa.me/221774847284?text=" + encodeURIComponent("Bonjour, je viens de payer Flip (2000 FCFA) avec Wave. Voici mon reçu :");
   document.getElementById("proof").href = WA_PROOF;
 
   function openBuy(e) {
