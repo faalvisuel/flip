@@ -267,7 +267,7 @@
           <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
           <svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a.6.6 0 0 0-.75-.8A10 10 0 1 0 21.3 15a.6.6 0 0 0-.8-.8Z"/></svg>
         </button>
-        <a class="pill red small try" href="#essayer">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+        <a class="pill red small try" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
       </div>
     </nav>
 
@@ -276,7 +276,7 @@
       <h1>Change de format. Garde <span class="sel"><b>tout.</b></span></h1>
       <p class="lead">Flip décline ta compo en 9:16, 4:5, 1:1 ou 16:9 en un clic. Textes, images, précomps et groupes de Nulls sont réorganisés et centrés, sans rien couper ni dénaturer.</p>
       <div class="cta">
-        <a class="pill primary try" href="#essayer">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+        <a class="pill primary try" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
         <a class="pill light" href="#demo">Voir la démo<span class="dot"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
       </div>
       <p class="price-note"><strong>2000 FCFA</strong> · prix de la bêta, il augmentera avec les prochaines versions.</p>
@@ -389,7 +389,7 @@
         <h2>Essaie Flip sur tes projets.</h2>
         <p>2000 FCFA pendant la bêta. Le prix augmentera avec les prochaines versions.</p>
       </div>
-      <a class="pill primary try" href="#essayer">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+      <a class="pill primary try" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
     </div>
   </div>
   <footer>
@@ -459,7 +459,7 @@
     showStep(false);
     if (dlg.showModal) dlg.showModal(); else window.open(go.href, "_blank");
   }
-  Array.prototype.forEach.call(document.querySelectorAll(".try"), function (a) { a.addEventListener("click", openBuy); });
+  // Les boutons « Essayer Flip » mènent directement à la page de vente MinaLab (lien normal, pas de panneau).
   document.getElementById("buyClose").addEventListener("click", function () { dlg.close(); });
   dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
   document.getElementById("backChoose").addEventListener("click", function (e) { e.preventDefault(); showStep(false); });
