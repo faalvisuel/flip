@@ -364,11 +364,11 @@
           <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
           <svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a.6.6 0 0 0-.75-.8A10 10 0 1 0 21.3 15a.6.6 0 0 0-.8-.8Z"/></svg>
         </button>
-        <a class="pill red small try" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+        <a class="pill red small try" data-track="cta-menu" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
       </div>
     </nav>
 
-    <header class="hero" id="essayer">
+    <header class="hero" id="essayer" data-section="1 · Haut de page">
       <img class="f3d i1" src="assets/3d/format_916.webp" alt="" aria-hidden="true" width="320" height="320" fetchpriority="high">
       <img class="f3d i2" src="assets/3d/etincelle.webp" alt="" aria-hidden="true" width="320" height="320">
       <img class="f3d i3" src="assets/3d/calques.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
@@ -376,13 +376,13 @@
       <h1>Change de format. Garde <span class="sel"><b>tout.</b></span></h1>
       <p class="lead">Flip décline ta compo en 9:16, 4:5, 1:1 ou 16:9 en un clic. Textes, images, précomps et groupes de Nulls sont réorganisés et centrés, sans rien couper ni dénaturer.</p>
       <div class="cta">
-        <a class="pill primary try" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
-        <a class="pill light" href="#demo">Voir la démo<span class="dot"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
+        <a class="pill primary try" data-track="cta-haut" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+        <a class="pill light" data-track="voir-demo" href="#demo">Voir la démo<span class="dot"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
       </div>
       <p class="price-note"><strong>1000 FCFA</strong> · prix de la bêta, il augmentera avec les prochaines versions.</p>
     </header>
 
-    <div class="stage" id="demo">
+    <div class="stage" id="demo" data-section="2 · Démo">
       <div class="frame">
         <video controls playsinline preload="metadata" poster="assets/poster.jpg">
           <source src="assets/Flip_demo.mp4" type="video/mp4">
@@ -407,7 +407,7 @@
     </div>
 
 
-    <section class="panel-sec" aria-labelledby="panelTitle">
+    <section class="panel-sec" id="panneau" aria-labelledby="panelTitle" data-section="3 · Le panneau">
       <div>
         <span class="tag"><b>v4.1</b>Le panneau</span>
         <h2 id="panelTitle" style="margin-top:16px">Tout se règle dans un seul panneau.</h2>
@@ -427,7 +427,7 @@
         <img class="f3d c3" src="assets/3d/chrono.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
       </div>
     </section>
-    <section class="dark" id="pourquoi">
+    <section class="dark" id="pourquoi" data-section="4 · Pourquoi Flip">
       <div>
         <span class="tag"><b>16:9</b>Pourquoi Flip</span>
         <h2 style="margin-top:16px">Pensé pour les vrais projets.</h2>
@@ -445,7 +445,7 @@
       </div>
     </section>
 
-    <section class="voices" id="avis">
+    <section class="voices" id="avis" data-section="5 · Avis">
       <div class="head">
         <div>
           <span class="tag"><b>9:16</b>Retours de la bêta</span>
@@ -470,7 +470,7 @@
       </div>
     </section>
 
-    <section class="install" id="installation">
+    <section class="install" id="installation" data-section="6 · Installation">
       <div class="head">
         <div>
           <span class="tag"><b>4:5</b>Installation</span>
@@ -485,7 +485,7 @@
       </ol>
     </section>
 
-    <section class="feedback" id="retours">
+    <section class="feedback" id="retours" data-section="7 · Retours">
       <div class="dash">
         <div>
           <span class="tag"><b>1:1</b>Ton retour</span>
@@ -506,14 +506,14 @@
       </div>
     </section>
 
-    <div class="final">
+    <div class="final" data-section="8 · Appel final">
       <img class="f3d e1" src="assets/3d/etincelle.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
       <img class="f3d e2" src="assets/3d/curseur.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
       <div>
         <h2>Essaie Flip sur tes projets.</h2>
         <p>1000 FCFA pendant la bêta. Le prix augmentera avec les prochaines versions.</p>
       </div>
-      <a class="pill primary try" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+      <a class="pill primary try" data-track="cta-final" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
     </div>
   </div>
   <footer>
@@ -663,5 +663,6 @@
   });
 })();
 </script>
+<script src="assets/track.js" defer></script>
 </body>
 </html>

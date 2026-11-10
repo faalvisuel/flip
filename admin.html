@@ -70,6 +70,7 @@
       <button class="tab" data-f="paid" aria-pressed="false">Validées</button>
       <button class="tab" data-f="rejected" aria-pressed="false">Refusées</button>
       <span class="spacer"></span>
+      <a class="ghost" href="stats.html">Audience du site</a>
       <a class="ghost" href="https://business.wave.com/transactions" target="_blank" rel="noopener">Ouvrir Wave ↗</a>
       <button class="ghost" id="reload">Actualiser</button>
     </div>
@@ -82,6 +83,7 @@
   var FN = "https://mqgjwyqpibbthfgcthva.supabase.co/functions/v1/admin-review";
   var SITE = "https://faalvisuel.github.io/flip/";
   var KEY = "flip-admin-token";
+  try { localStorage.setItem("flip-no-track", "1"); } catch (e) {} // tes propres visites ne sont pas comptées
   var $ = function (id) { return document.getElementById(id); };
   var token = "";
   var items = [];

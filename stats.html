@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Audience — Flip</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --page: #F4F1F2; --paper: #FAF9F9; --card: #FFFFFF; --ink: #0A0A0B; --ink-2: #3F3A3C; --muted: #6E6668; --line: #E4DEE0;
+    --red: #E0213F; --red-soft: #FBE3E7; --bord: #7A1024; --night: #1A0509;
+    --s1: #2F6BD8; --s2: #E0213F;                      /* visiteurs / clics — palette validée (clair) */
+    --good: #157F3B; --good-bg: #E3F4E8; --warn: #8A5A00; --warn-bg: #FFF2D6; --bad: #B5162F; --bad-bg: #FBE3E7;
+    --display: "Space Grotesk", "Inter", system-ui, sans-serif; --ui: "Inter", system-ui, -apple-system, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --page: #0E0809; --paper: #140B0D; --card: #1D1114; --ink: #F4F2F2; --ink-2: #D9CCCE; --muted: #A8989B; --line: rgba(255,255,255,.12);
+      --red-soft: rgba(224,33,63,.16); --s1: #4F86F0; --s2: #F0284A; --good: #6FD38F; --good-bg: rgba(111,211,143,.12); --warn: #FFC85A; --warn-bg: rgba(255,200,90,.12); --bad: #FF7A8E; --bad-bg: rgba(224,33,63,.16); color-scheme: dark; }
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background:
+    radial-gradient(800px 420px at 50% -160px, rgba(224, 33, 63, .14), transparent 70%), var(--page);
+    color: var(--ink); font: 14.5px/1.5 var(--ui); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  main { max-width: 1180px; margin: 0 auto; padding: 22px 16px 70px; }
+  .top { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-bottom: 18px; }
+  .brand { display: flex; align-items: center; gap: 10px; font: 700 22px/1 var(--display); letter-spacing: -.6px; }
+  .brand svg { width: 26px; height: 26px; }
+  .brand small { font: 500 13px/1 var(--mono); color: var(--muted); letter-spacing: 0; margin-left: 4px; }
+  .live { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font: 600 13px/1 var(--display); }
+  .live i { width: 9px; height: 9px; border-radius: 50%; background: var(--good); box-shadow: 0 0 0 0 rgba(43,213,118,.6); animation: pulse 2s infinite; }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 9px rgba(43,213,118,0); } 100% { box-shadow: 0 0 0 0 rgba(43,213,118,0); } }
+  .spacer { flex: 1; }
+  .seg { display: inline-flex; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+  .seg button { border: 0; background: transparent; color: var(--ink-2); font: 600 13px/1 var(--display); padding: 8px 12px; border-radius: 999px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .ghost { color: var(--ink-2); font: 500 13px/1 var(--ui); text-decoration: none; padding: 8px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); cursor: pointer; }
+  .tabs { display: flex; gap: 6px; margin: 4px 0 18px; border-bottom: 1px solid var(--line); }
+  .tabs button { border: 0; background: none; padding: 10px 12px; font: 600 14px/1 var(--display); color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tabs button[aria-selected="true"] { color: var(--ink); border-color: var(--red); }
+
+  .kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; min-width: 0; box-shadow: 0 18px 34px -30px rgba(224,33,63,.6); }
+  .kpi .l { font: 500 12.5px/1.3 var(--ui); color: var(--muted); }
+  .kpi .v { font: 700 30px/1.1 var(--display); letter-spacing: -1px; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .kpi .d { font: 600 12px/1 var(--display); margin-top: 8px; color: var(--muted); }
+  .kpi .d.up { color: var(--good); } .kpi .d.down { color: var(--bad); }
+  .kpi.hl { background: linear-gradient(140deg, #7A1024, #E0213F 60%, #FF5C77); color: #fff; border-color: transparent; }
+  .kpi.hl .l, .kpi.hl .d { color: rgba(255,255,255,.85); }
+
+  .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 18px; min-width: 0; }
+  .card h2 { margin: 0 0 4px; font: 700 17px/1.2 var(--display); letter-spacing: -.3px; }
+  .card .sub { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+  .c12 { grid-column: span 12; } .c8 { grid-column: span 8; } .c7 { grid-column: span 7; } .c6 { grid-column: span 6; } .c5 { grid-column: span 5; } .c4 { grid-column: span 4; }
+
+  .insights { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .ins { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 4px 12px; padding: 14px; border-radius: 16px; background: var(--paper); border: 1px solid var(--line); }
+  .ins .ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font: 700 15px/1 var(--display); grid-row: span 2; }
+  .ins.good .ic { background: var(--good-bg); color: var(--good); } .ins.warn .ic { background: var(--warn-bg); color: var(--warn); } .ins.bad .ic { background: var(--bad-bg); color: var(--bad); } .ins.info .ic { background: var(--red-soft); color: var(--red); }
+  .ins b { font: 600 14.5px/1.35 var(--display); }
+  .ins .tag { font: 600 10.5px/1 var(--mono); text-transform: uppercase; letter-spacing: .5px; margin-left: 6px; color: var(--muted); }
+  .ins p { margin: 0; color: var(--ink-2); font-size: 13.5px; }
+
+  .legend { display: flex; gap: 14px; font-size: 12.5px; color: var(--ink-2); margin-bottom: 6px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+  .chart { position: relative; }
+  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .axis text { fill: var(--muted); font: 11px var(--ui); }
+  .grid-line { stroke: var(--line); stroke-width: 1; }
+  .tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--paper); font: 500 12.5px/1.45 var(--ui); padding: 8px 10px; border-radius: 10px; white-space: nowrap; transform: translate(-50%, -110%); box-shadow: 0 10px 24px -10px rgba(0,0,0,.5); z-index: 5; }
+  .tip b { font-family: var(--display); }
+  .bars { display: flex; flex-direction: column; gap: 9px; }
+  .bar { display: grid; grid-template-columns: minmax(110px, 34%) minmax(0, 1fr) 54px; align-items: center; gap: 10px; font-size: 13px; }
+  .bar .n { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar .t { height: 12px; border-radius: 0 4px 4px 0; background: var(--red-soft); position: relative; overflow: hidden; }
+  .bar .t i { position: absolute; inset: 0 auto 0 0; background: var(--red); border-radius: 0 4px 4px 0; }
+  .bar .p { text-align: right; font: 600 13px/1 var(--display); font-variant-numeric: tabular-nums; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font: 600 11px/1.2 var(--mono); text-transform: uppercase; letter-spacing: .4px; color: var(--muted); padding: 0 8px 8px; border-bottom: 1px solid var(--line); }
+  td { padding: 8px; border-bottom: 1px solid var(--line); color: var(--ink-2); vertical-align: top; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td:first-child { color: var(--ink); word-break: break-word; }
+  .empty { color: var(--muted); font-size: 13px; padding: 10px 0; }
+  .heat { display: grid; grid-template-columns: 34px repeat(24, minmax(0, 1fr)); gap: 3px; font-size: 10.5px; color: var(--muted); }
+  .heat div { height: 20px; border-radius: 4px; }
+  .heat .lab { height: auto; display: flex; align-items: center; }
+  .split { display: flex; height: 14px; border-radius: 999px; overflow: hidden; gap: 2px; margin: 6px 0 10px; }
+  .split i { display: block; height: 100%; }
+  .toggle { font: 500 12.5px/1 var(--ui); color: var(--muted); background: none; border: 0; cursor: pointer; text-decoration: underline; padding: 0; margin-top: 10px; }
+
+  .links .row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr) auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .links code { font: 12px/1.4 var(--mono); color: var(--ink-2); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; word-break: break-all; }
+  .copy { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 7px 12px; font: 600 12px/1 var(--display); cursor: pointer; white-space: nowrap; }
+  .copy:hover { border-color: var(--red); }
+  .builder { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 8px; align-items: end; margin-bottom: 10px; }
+  .builder label { display: flex; flex-direction: column; gap: 4px; font: 600 12px/1 var(--ui); color: var(--muted); }
+  .builder input, .builder select { font: 14px var(--ui); color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; }
+  .login { max-width: 420px; margin: 12vh auto; background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 24px; display: grid; gap: 12px; }
+  .login input { font: 14px var(--mono); padding: 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
+  .btn { border: 0; border-radius: 999px; padding: 11px 18px; font: 600 14px/1 var(--display); cursor: pointer; background: var(--red); color: #fff; justify-self: start; }
+  .note { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+  @media (max-width: 1000px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } .c8, .c7, .c6, .c5, .c4 { grid-column: span 12; } .insights { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .kpi .v { font-size: 25px; } .links .row, .builder { grid-template-columns: 1fr; } .heat { grid-template-columns: 30px repeat(24, minmax(0, 1fr)); gap: 2px; } .heat div { height: 14px; } }
+</style>
+</head>
+<body>
+<form class="login" id="login" hidden>
+  <b style="font:700 20px/1.2 var(--display)">Audience de Flip</b>
+  <span style="color:var(--muted);font-size:13px">Colle ton code d'accès vendeur (le même que pour les ventes).</span>
+  <input id="tokIn" autocomplete="off" spellcheck="false" placeholder="Code d'accès">
+  <button class="btn" type="submit">Ouvrir</button>
+  <span id="loginErr" style="color:var(--bad);font-size:13px" hidden>Code incorrect.</span>
+</form>
+
+<main id="app" hidden>
+  <div class="top">
+    <div class="brand"><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M28 18 H98 L88 36 H28 Z" fill="#E0213F"/><path d="M28 46 H80 L70 64 H28 Z" fill="currentColor"/><path d="M28 74 H50 V104 H28 Z" fill="currentColor"/></svg>Audience<small id="range"></small></div>
+    <span class="live" title="Visiteurs actifs ces 5 dernières minutes"><i></i><span id="live">—</span></span>
+    <span class="spacer"></span>
+    <div class="seg" role="group" aria-label="Période">
+      <button data-d="0" aria-pressed="false">Aujourd'hui</button><button data-d="7" aria-pressed="true">7 jours</button><button data-d="30" aria-pressed="false">30 jours</button><button data-d="90" aria-pressed="false">90 jours</button>
+    </div>
+    <button class="ghost" id="reload" type="button">Actualiser</button>
+    <a class="ghost" href="admin.html">Ventes Wave →</a>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="vue">Vue d'ensemble</button>
+    <button role="tab" aria-selected="false" data-tab="liens">Liens à partager</button>
+  </div>
+
+  <section id="tab-vue">
+    <div class="kpis" id="kpis"></div>
+    <div class="grid">
+      <div class="card c12">
+        <h2>Ce qu'il faut améliorer</h2>
+        <p class="sub">Calculé à partir de tes chiffres de la période. Le plus important en premier.</p>
+        <div class="insights" id="insights"></div>
+      </div>
+      <div class="card c8">
+        <h2>Visiteurs et clics « Essayer Flip » par jour</h2>
+        <p class="sub">Un clic = quelqu'un part vers la page d'achat MinaLab.</p>
+        <div class="legend"><span><i style="background:var(--s1)"></i>Visiteurs</span><span><i style="background:var(--s2)"></i>Clics « Essayer Flip »</span></div>
+        <div class="chart" id="daily"></div>
+        <button class="toggle" type="button" data-table="dailyTable">Voir en tableau</button>
+        <div id="dailyTable" hidden></div>
+      </div>
+      <div class="card c4">
+        <h2>Où cliquent-ils pour acheter ?</h2>
+        <p class="sub">Clics sur les boutons « Essayer Flip », par emplacement.</p>
+        <div class="bars" id="ctaWhere"></div>
+        <h2 style="margin-top:22px">Vidéo de démo</h2>
+        <p class="sub">Part des visites qui lancent la vidéo, puis jusqu'où.</p>
+        <div class="bars" id="video"></div>
+      </div>
+      <div class="card c6">
+        <h2>Jusqu'où lisent-ils la page ?</h2>
+        <p class="sub">Part des visites qui atteignent chaque section, dans l'ordre de la page.</p>
+        <div class="bars" id="funnel"></div>
+      </div>
+      <div class="card c6">
+        <h2>Quand viennent-ils ?</h2>
+        <p class="sub">Pages vues par jour et par heure (heure de Dakar). Publie juste avant les cases foncées.</p>
+        <div class="heat" id="heat"></div>
+      </div>
+      <div class="card c7">
+        <h2>D'où viennent-ils ?</h2>
+        <p class="sub">Site d'origine du visiteur, et part qui clique sur « Essayer Flip ».</p>
+        <div id="refs"></div>
+      </div>
+      <div class="card c5">
+        <h2>Appareils</h2>
+        <p class="sub">Visites et taux de clic par type d'écran.</p>
+        <div id="devices"></div>
+        <h2 style="margin-top:18px">Pays (d'après le fuseau horaire)</h2>
+        <div class="bars" id="tz" style="margin-top:10px"></div>
+      </div>
+      <div class="card c7">
+        <h2>Campagnes et posts</h2>
+        <p class="sub">Visites arrivées par tes liens de l'onglet « Liens à partager ».</p>
+        <div id="camps"></div>
+      </div>
+      <div class="card c5">
+        <h2>Autres clics</h2>
+        <p class="sub">Liens et boutons les plus utilisés en dehors de l'achat.</p>
+        <div id="others"></div>
+        <h2 style="margin-top:18px">Langue · thème</h2>
+        <div id="langTheme" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <p class="note">Mesure anonyme (sans cookie ni adresse IP), hébergée sur ton Supabase. Tes propres visites ne sont pas comptées depuis ce navigateur. Les achats faits sur MinaLab ne sont pas visibles ici : seuls les clics vers MinaLab et les ventes Wave du site le sont.</p>
+  </section>
+
+  <section id="tab-liens" hidden>
+    <div class="grid">
+      <div class="card c12">
+        <h2>Pourquoi des liens à part ?</h2>
+        <p class="sub" style="margin-bottom:0">Mets ces liens à la place du lien MinaLab direct : ils mènent vers ton site, qui renvoie vers MinaLab, et le tableau de bord sait alors <b>quel réseau et quel post</b> t'apportent des clics. Le lien de bio se met une seule fois ; les liens de post se collent dans le texte du post (LinkedIn, WhatsApp, Facebook, X, Discord…).</p>
+      </div>
+      <div class="card c12 links">
+        <h2>Créer un lien</h2>
+        <div class="builder">
+          <label>Réseau<select id="bSrc"><option>instagram</option><option>tiktok</option><option>youtube</option><option>linkedin</option><option>whatsapp</option><option>facebook</option><option>x</option><option>discord</option><option>reddit</option><option>behance</option></select></label>
+          <label>Type<select id="bMed"><option value="bio">Bio</option><option value="post">Post</option><option value="story">Story / statut</option><option value="dm">Message privé</option><option value="pub">Publicité</option></select></label>
+          <label>Nom du post<input id="bCamp" placeholder="ex. s1-lun-2-heures"></label>
+          <label>Détail (facultatif)<input id="bCont" placeholder="ex. version-b"></label>
+          <button class="copy" type="button" id="bCopy">Copier le lien</button>
+        </div>
+        <code id="bOut"></code>
+      </div>
+      <div class="card c12 links">
+        <h2>Liens de bio — à mettre une fois</h2>
+        <div id="bioLinks"></div>
+      </div>
+      <div class="card c12 links">
+        <h2>Liens des posts du calendrier</h2>
+        <p class="sub">Même nom que les plans de travail Illustrator et la base Notion.</p>
+        <div id="postLinks"></div>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+(function () {
+  var FN = "https://mqgjwyqpibbthfgcthva.supabase.co/functions/v1/site-stats";
+  var SITE = "https://faalvisuel.github.io/flip/";
+  var KEY = "flip-admin-token";
+  try { localStorage.setItem("flip-no-track", "1"); } catch (e) {}
+  var $ = function (id) { return document.getElementById(id); };
+  var token = "", days = 7, data = null;
+  var m = location.hash.match(/t=([a-f0-9]{16,})/i);
+  if (m) { token = m[1]; try { localStorage.setItem(KEY, token); } catch (e) {} history.replaceState(null, "", location.pathname); }
+  if (!token) { try { token = localStorage.getItem(KEY) || ""; } catch (e) {} }
+
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    for (var k in (attrs || {})) { if (k === "text") e.textContent = attrs[k]; else if (k === "style") e.style.cssText = attrs[k]; else e.setAttribute(k, attrs[k]); }
+    (kids || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function fmt(n) { return (Math.round(n) || 0).toLocaleString("fr-FR"); }
+  function pct(a, b) { return b ? a / b * 100 : 0; }
+  function p0(x) { return (Math.round(x * 10) / 10).toLocaleString("fr-FR") + " %"; }
+  function dur(s) { s = Math.round(s || 0); return s < 60 ? s + " s" : Math.floor(s / 60) + " min " + String(s % 60).padStart(2, "0"); }
+  function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); return n; }
+  var tip = $("tip");
+  function showTip(evt, html, host) {
+    var r = host.getBoundingClientRect(); tip.hidden = false; tip.innerHTML = html;
+    tip.style.left = (evt.clientX + scrollX) + "px"; tip.style.top = (r.top + scrollY + (evt.clientY - r.top)) + "px";
+  }
+  function hideTip() { tip.hidden = true; }
+
+  // ---------- chargement
+  function range() {
+    var to = new Date(), from = new Date(Date.UTC(to.getUTCFullYear(), to.getUTCMonth(), to.getUTCDate()));
+    if (days) from = new Date(+from - (days - 1) * 864e5);
+    return { from: from, to: to };
+  }
+  function load() {
+    var r = range();
+    $("range").textContent = r.from.toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) + " → aujourd'hui";
+    return fetch(FN + "?from=" + r.from.toISOString() + "&to=" + r.to.toISOString(), { headers: { "x-admin-token": token } })
+      .then(function (res) { if (res.status === 401) throw new Error("auth"); return res.json(); })
+      .then(function (d) { data = d; $("login").hidden = true; $("app").hidden = false; render(); })
+      .catch(function (e) {
+        if (e.message === "auth") { try { localStorage.removeItem(KEY); } catch (x) {} $("app").hidden = true; $("login").hidden = false; if (token) $("loginErr").hidden = false; }
+      });
+  }
+
+  // ---------- rendu
+  var SECTIONS = ["1 · Haut de page", "2 · Démo", "3 · Le panneau", "4 · Pourquoi Flip", "5 · Avis", "6 · Installation", "7 · Retours", "8 · Appel final"];
+  var CTA = { "cta-menu": "Menu", "cta-haut": "Haut de page", "cta-final": "Appel final" };
+  var TZ = { "Africa/Dakar": "Sénégal", "Africa/Abidjan": "Côte d'Ivoire", "Africa/Bamako": "Mali", "Africa/Conakry": "Guinée", "Africa/Lome": "Togo", "Africa/Porto-Novo": "Bénin",
+    "Africa/Ouagadougou": "Burkina Faso", "Africa/Niamey": "Niger", "Africa/Douala": "Cameroun", "Africa/Libreville": "Gabon", "Africa/Kinshasa": "RD Congo", "Africa/Lubumbashi": "RD Congo",
+    "Africa/Casablanca": "Maroc", "Africa/Algiers": "Algérie", "Africa/Tunis": "Tunisie", "Africa/Nouakchott": "Mauritanie", "Africa/Banjul": "Gambie", "Africa/Lagos": "Nigeria", "Africa/Accra": "Ghana",
+    "Europe/Paris": "France", "Europe/Brussels": "Belgique", "Europe/Zurich": "Suisse", "Europe/London": "Royaume-Uni", "America/Toronto": "Canada", "America/Montreal": "Canada", "America/New_York": "États-Unis" };
+
+  function delta(c, p, inv) {
+    if (!p) return { t: c ? "nouveau" : "—", cls: "" };
+    var d = (c - p) / p * 100; var good = inv ? d < 0 : d > 0;
+    return { t: (d > 0 ? "▲ +" : d < 0 ? "▼ " : "= ") + Math.round(d) + " % vs période d'avant", cls: d === 0 ? "" : good ? "up" : "down" };
+  }
+  function render() {
+    var c = data.cur, p = data.prev || {};
+    $("live").textContent = data.live + (data.live > 1 ? " personnes" : " personne") + " sur le site";
+    var ctr = pct(c.cta_visitors, c.visitors), pctr = pct(p.cta_visitors, p.visitors);
+    var bounce = pct(c.bounce, c.sessions), pbounce = pct(p.bounce, p.sessions);
+    var K = [
+      ["Visiteurs", fmt(c.visitors), delta(c.visitors, p.visitors)],
+      ["Ont cliqué « Essayer Flip »", fmt(c.cta_visitors), delta(c.cta_visitors, p.cta_visitors), 1],
+      ["Taux de clic d'achat", p0(ctr), delta(ctr, pctr)],
+      ["Temps moyen sur la page", dur(c.avg_secs), delta(c.avg_secs, p.avg_secs)],
+      ["Partent sans rien faire", p0(bounce), delta(bounce, pbounce, true)],
+      ["Ventes Wave validées", fmt(c.sales.paid) + (c.sales.revenue ? " · " + fmt(c.sales.revenue) + " F" : ""), delta(c.sales.paid, (p.sales || {}).paid)]
+    ];
+    var kp = clear($("kpis"));
+    K.forEach(function (k) { kp.appendChild(el("div", { "class": "kpi" + (k[3] ? " hl" : "") }, [el("div", { "class": "l", text: k[0] }), el("div", { "class": "v", text: k[1] }), el("div", { "class": "d " + k[2].cls, text: k[2].t })])); });
+
+    insights(c, ctr, bounce);
+    daily(c.daily);
+    bars($("ctaWhere"), Object.keys(CTA).map(function (k) { return [CTA[k], (c.cta_by_label || {})[k] || 0]; }), "count");
+    var plays = (c.video || {})["lecture"] || 0;
+    bars($("video"), [["Lancent la vidéo", pct(plays, c.sessions)], ["Regardent 25 %", pct((c.video || {})["25%"] || 0, c.sessions)], ["Regardent 50 %", pct((c.video || {})["50%"] || 0, c.sessions)], ["Regardent 75 %", pct((c.video || {})["75%"] || 0, c.sessions)], ["Jusqu'à la fin", pct((c.video || {})["fin"] || 0, c.sessions)]], "pct");
+    bars($("funnel"), SECTIONS.map(function (s) { return [s.replace(/^\d · /, ""), pct((c.sections || {})[s] || 0, c.sessions)]; }), "pct");
+    heat(c.heat);
+    table($("refs"), ["Provenance", "Visiteurs", "Cliquent", "Taux"], (c.referrers || []).map(function (r) { return [r.k, fmt(r.v), fmt(r.c), p0(pct(r.c, r.v))]; }), "Pas encore de visite.");
+    var dv = c.devices || []; var tot = dv.reduce(function (a, b) { return a + b.v; }, 0);
+    var dvEl = clear($("devices"));
+    if (!tot) dvEl.appendChild(el("p", { "class": "empty", text: "Pas encore de visite." }));
+    else {
+      var cols = { mobile: "var(--s2)", ordinateur: "var(--s1)", tablette: "var(--muted)" };
+      var sp = el("div", { "class": "split", role: "img", "aria-label": "Répartition des appareils" });
+      dv.forEach(function (d) { sp.appendChild(el("i", { style: "width:" + pct(d.v, tot) + "%;background:" + (cols[d.k] || "var(--muted)"), title: d.k })); });
+      dvEl.appendChild(sp);
+      table(dvEl, ["Appareil", "Part", "Visites", "Taux de clic"], dv.map(function (d) { return [d.k, p0(pct(d.v, tot)), fmt(d.v), p0(pct(d.c, d.v))]; }), "", true);
+    }
+    var tzAgg = {}; (c.tz || []).forEach(function (t) { var n = TZ[t.k] || t.k.replace(/^.*\//, "").replace(/_/g, " "); tzAgg[n] = (tzAgg[n] || 0) + t.v; });
+    var tzTot = Object.keys(tzAgg).reduce(function (a, k) { return a + tzAgg[k]; }, 0);
+    bars($("tz"), Object.keys(tzAgg).sort(function (a, b) { return tzAgg[b] - tzAgg[a]; }).slice(0, 6).map(function (k) { return [k, pct(tzAgg[k], tzTot)]; }), "pct");
+    table($("camps"), ["Réseau", "Type", "Post", "Visiteurs", "Cliquent"], (c.campaigns || []).map(function (r) { return [r.s, r.m || "—", r.k || "—", fmt(r.v), fmt(r.c) + " (" + p0(pct(r.c, r.v)) + ")"]; }), "Aucune visite par un lien de campagne pour l'instant. Utilise l'onglet « Liens à partager ».");
+    table($("others"), ["Clic", "Nombre"], (c.other_clicks || []).map(function (r) { return [r.k, fmt(r.v)]; }), "Pas encore de clic.");
+    var lt = clear($("langTheme")); var lg = (c.lang || []).map(function (l) { return l.k + " " + fmt(l.v); }).join(" · ");
+    var th = c.theme || {}; var tht = (th.dark || 0) + (th.light || 0);
+    lt.appendChild(el("p", { "class": "empty", style: "padding:0", text: (lg || "—") + (tht ? "  ·  mode sombre : " + p0(pct(th.dark || 0, tht)) : "") }));
+  }
+
+  function bars(host, rows, kind) {
+    clear(host); var max = Math.max.apply(null, rows.map(function (r) { return r[1]; }).concat([kind === "pct" ? 100 : 1]));
+    if (kind === "pct") max = 100;
+    rows.forEach(function (r) {
+      var w = max ? r[1] / max * 100 : 0;
+      host.appendChild(el("div", { "class": "bar", title: r[0] + " : " + (kind === "pct" ? p0(r[1]) : fmt(r[1])) }, [el("span", { "class": "n", text: r[0] }), el("span", { "class": "t" }, [el("i", { style: "width:" + w + "%" })]), el("span", { "class": "p", text: kind === "pct" ? Math.round(r[1]) + " %" : fmt(r[1]) })]));
+    });
+  }
+  function table(host, head, rows, emptyText, keep) {
+    if (!keep) clear(host);
+    if (!rows.length) { if (emptyText) host.appendChild(el("p", { "class": "empty", text: emptyText })); return; }
+    var t = el("table"), tr = el("tr");
+    head.forEach(function (h, i) { tr.appendChild(el("th", { "class": i ? "num" : "", text: h })); });
+    t.appendChild(el("thead", {}, [tr])); var tb = el("tbody");
+    rows.forEach(function (r) { var row = el("tr"); r.forEach(function (v, i) { row.appendChild(el("td", { "class": i ? "num" : "", text: v })); }); tb.appendChild(row); });
+    t.appendChild(tb); host.appendChild(t);
+  }
+
+  // Courbe : 2 séries sur un seul axe (mêmes unités), info-bulle avec réticule
+  function daily(rows) {
+    var host = clear($("daily")); rows = rows || [];
+    var W = 720, H = 240, L = 34, Rr = 64, T = 12, B = 26, iw = W - L - Rr, ih = H - T - B;
+    var max = Math.max(4, Math.max.apply(null, rows.map(function (r) { return Math.max(r.v, r.c); })));
+    var step = Math.pow(10, Math.floor(Math.log10(max))); var top = Math.ceil(max / step) * step; if (top / step < 3) { step = step / 2; top = Math.ceil(max / step) * step; }
+    var x = function (i) { return L + (rows.length < 2 ? iw / 2 : i / (rows.length - 1) * iw); }, y = function (v) { return T + ih - v / top * ih; };
+    var NS = "http://www.w3.org/2000/svg";
+    function s(tag, a) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); return e; }
+    var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Visiteurs et clics par jour" });
+    var g = s("g", { "class": "axis" });
+    for (var v = 0; v <= top; v += step) { svg.appendChild(s("line", { x1: L, x2: L + iw, y1: y(v), y2: y(v), "class": "grid-line" })); var tx = s("text", { x: L - 8, y: y(v) + 4, "text-anchor": "end" }); tx.textContent = fmt(v); g.appendChild(tx); }
+    var every = Math.max(1, Math.ceil(rows.length / 8));
+    rows.forEach(function (r, i) { if (i % every && i !== rows.length - 1) return; var t = s("text", { x: x(i), y: H - 6, "text-anchor": "middle" }); t.textContent = new Date(r.d + "T00:00:00Z").toLocaleDateString("fr-FR", { day: "numeric", month: "short", timeZone: "UTC" }); g.appendChild(t); });
+    svg.appendChild(g);
+    [["v", "var(--s1)", "Visiteurs"], ["c", "var(--s2)", "Clics"]].forEach(function (sr) {
+      var d = rows.map(function (r, i) { return (i ? "L" : "M") + x(i) + " " + y(r[sr[0]]); }).join(" ");
+      svg.appendChild(s("path", { d: d, fill: "none", stroke: sr[1], "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      if (rows.length) { var last = rows[rows.length - 1]; svg.appendChild(s("circle", { cx: x(rows.length - 1), cy: y(last[sr[0]]), r: 4, fill: sr[1], stroke: "var(--card)", "stroke-width": 2 }));
+        var lb = s("text", { x: x(rows.length - 1) + 9, y: y(last[sr[0]]) + 4, fill: "var(--ink-2)", "font-size": 11.5 }); lb.textContent = sr[2]; svg.appendChild(lb); }
+    });
+    var cross = s("line", { y1: T, y2: T + ih, stroke: "var(--muted)", "stroke-width": 1, "stroke-dasharray": "3 3", opacity: 0 }); svg.appendChild(cross);
+    var hit = s("rect", { x: L, y: T, width: iw, height: ih, fill: "transparent" }); svg.appendChild(hit);
+    hit.addEventListener("mousemove", function (evt) {
+      if (!rows.length) return; var pt = svg.getBoundingClientRect(); var px = (evt.clientX - pt.left) / pt.width * W;
+      var i = Math.max(0, Math.min(rows.length - 1, Math.round((px - L) / iw * (rows.length - 1)))); var r = rows[i];
+      cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("opacity", 1);
+      showTip(evt, "<b>" + new Date(r.d + "T00:00:00Z").toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" }) + "</b><br>Visiteurs : " + fmt(r.v) + "<br>Clics « Essayer Flip » : " + fmt(r.c), host);
+    });
+    hit.addEventListener("mouseleave", function () { cross.setAttribute("opacity", 0); hideTip(); });
+    host.appendChild(svg);
+    table($("dailyTable"), ["Jour", "Visiteurs", "Clics"], rows.map(function (r) { return [r.d, fmt(r.v), fmt(r.c)]; }), "—");
+  }
+
+  function heat(cells) {
+    var host = clear($("heat")); var map = {}, max = 0;
+    (cells || []).forEach(function (c) { map[c.dow + "-" + c.h] = c.n; max = Math.max(max, c.n); });
+    host.appendChild(el("span", { "class": "lab" }));
+    for (var h = 0; h < 24; h++) host.appendChild(el("span", { "class": "lab", style: "justify-content:center", text: h % 3 ? "" : h + "h" }));
+    ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].forEach(function (dn, i) {
+      host.appendChild(el("span", { "class": "lab", text: dn }));
+      for (var h2 = 0; h2 < 24; h2++) {
+        var n = map[(i + 1) + "-" + h2] || 0; var a = max ? n / max : 0;
+        var cell = el("div", { style: "background:" + (n ? "rgba(224,33,63," + (0.12 + a * 0.88).toFixed(2) + ")" : "var(--paper)") + ";border:1px solid var(--line)", "aria-label": dn + " " + h2 + "h : " + n + " pages vues" });
+        (function (dn, h2, n) { cell.addEventListener("mousemove", function (e) { showTip(e, "<b>" + dn + " " + h2 + "h–" + (h2 + 1) + "h</b><br>" + fmt(n) + " pages vues", host); }); cell.addEventListener("mouseleave", hideTip); })(dn, h2, n);
+        host.appendChild(cell);
+      }
+    });
+  }
+
+  // ---------- recommandations automatiques
+  function insights(c, ctr, bounce) {
+    var out = [], host = clear($("insights"));
+    function add(level, title, text, w) { out.push({ level: level, title: title, text: text, w: w }); }
+    var V = c.visitors || 0, S = c.sessions || 0;
+    if (V < 30) add("info", "Pas encore assez de visites pour conclure (" + V + ")", "Les conseils deviennent fiables à partir d'une cinquantaine de visiteurs. Remplace le lien MinaLab de tes bios par ton lien de bio (onglet « Liens à partager ») pour faire venir les gens sur le site et mesurer chaque réseau.", 100);
+    if (V >= 20) {
+      if (ctr < 3) add("bad", "Seulement " + p0(ctr) + " des visiteurs cliquent sur « Essayer Flip »", "Montre le prix et la démo plus tôt, et rends le bouton plus visible sur mobile. Un bon objectif pour une page produit est entre 5 et 10 %.", 90);
+      else if (ctr < 6) add("warn", "Taux de clic d'achat correct : " + p0(ctr), "Il y a de la marge. Teste un bouton plus parlant (« Tester Flip pour 1000 F ») et ajoute un avis client juste sous la vidéo.", 60);
+      else add("good", "Très bon taux de clic d'achat : " + p0(ctr), "La page convainc. Ton levier maintenant, c'est d'amener plus de monde : publie plus souvent sur le réseau qui convertit le mieux.", 30);
+    }
+    if (S >= 20) {
+      var prev = null, worst = null;
+      SECTIONS.forEach(function (s) { var v = pct((c.sections || {})[s] || 0, S); if (prev && prev.v - v > (worst ? worst.d : 0)) worst = { from: prev.s, to: s, d: prev.v - v }; prev = { s: s, v: v }; });
+      if (worst && worst.d > 15) add(worst.d > 30 ? "bad" : "warn", Math.round(worst.d) + " % des visiteurs décrochent entre « " + worst.from.replace(/^\d · /, "") + " » et « " + worst.to.replace(/^\d · /, "") + " »", "C'est le plus gros point de sortie de la page. Raccourcis la section « " + worst.from.replace(/^\d · /, "") + " » ou remonte un bouton « Essayer Flip » juste avant.", 80);
+      var plays = pct((c.video || {})["lecture"] || 0, S), fin = pct((c.video || {})["fin"] || 0, S);
+      if (plays < 25) add("warn", "Seulement " + p0(plays) + " des visites lancent la vidéo de démo", "La vidéo est ton meilleur argument. Affiche une boucle muette de 6 secondes (avant → après) en haut de page, ou une miniature plus parlante.", 70);
+      else if (plays && fin / plays < 0.25) add("warn", "La plupart arrêtent la vidéo avant la fin", "Seuls " + Math.round(fin / plays * 100) + " % de ceux qui la lancent la finissent. Fais une version de 30 secondes qui montre le résultat dès les 5 premières secondes.", 55);
+      if (bounce > 60) add("bad", p0(bounce) + " des visites repartent sans rien faire", "Le message du haut de page n'accroche pas assez ces visiteurs. Vérifie que le lien de ton post correspond à ce qu'ils trouvent en arrivant (même promesse, même visuel).", 75);
+      if (c.avg_secs && c.avg_secs < 20) add("warn", "Temps moyen très court : " + dur(c.avg_secs), "Les visiteurs ne restent pas assez pour voir la démo. Mets l'avant/après visible sans défiler sur mobile.", 50);
+    }
+    var dv = c.devices || [], mob = dv.filter(function (d) { return d.k === "mobile"; })[0], desk = dv.filter(function (d) { return d.k === "ordinateur"; })[0];
+    if (mob && desk && mob.v >= 15 && desk.v >= 10) {
+      var mr = pct(mob.c, mob.v), dr = pct(desk.c, desk.v);
+      if (mr < dr * 0.6) add("bad", "Sur mobile, on clique " + Math.round(dr / Math.max(mr, 0.1)) + "× moins que sur ordinateur", "Rappel : Flip s'utilise sur ordinateur. Ajoute pour le mobile un bouton « M'envoyer le lien sur WhatsApp » pour qu'ils achètent plus tard depuis leur ordinateur.", 85);
+    }
+    if (mob && pct(mob.v, dv.reduce(function (a, b) { return a + b.v; }, 0)) > 60) add("info", "La majorité de tes visiteurs sont sur mobile", "Teste chaque nouvelle section d'abord sur téléphone, et garde les textes courts.", 20);
+    var refs = (c.referrers || []).filter(function (r) { return r.v >= 8 && r.k !== "Direct"; });
+    if (refs.length) { var best = refs.slice().sort(function (a, b) { return pct(b.c, b.v) - pct(a.c, a.v); })[0];
+      if (best.c) add("good", "« " + best.k + " » t'amène les visiteurs les plus intéressés", p0(pct(best.c, best.v)) + " de ses visiteurs cliquent sur « Essayer Flip ». Publie plus sur ce canal.", 45); }
+    var camps = (c.campaigns || []).filter(function (r) { return r.v >= 5; });
+    if (camps.length) { var bc = camps.slice().sort(function (a, b) { return b.c - a.c || b.v - a.v; })[0];
+      add("good", "Ton post le plus efficace : « " + (bc.k || bc.s) + " » (" + bc.s + ")", fmt(bc.v) + " visiteurs, " + fmt(bc.c) + " clics d'achat. Refais un post sur le même modèle cette semaine.", 40); }
+    var hm = (c.heat || []).slice().sort(function (a, b) { return b.n - a.n; })[0];
+    if (hm && V >= 20) { var dn = ["", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"][hm.dow];
+      add("info", "Ton meilleur créneau : le " + dn + " vers " + hm.h + "h", "Publie tes posts 30 à 60 minutes avant, pour qu'ils soient en haut des fils au moment où ton public est en ligne.", 35); }
+    var cw = c.cta_by_label || {}, ctaTot = Object.keys(cw).reduce(function (a, k) { return a + cw[k]; }, 0);
+    if (ctaTot >= 10 && (cw["cta-final"] || 0) / ctaTot < 0.1) add("info", "Presque personne n'utilise le bouton du bas", "Les visiteurs décident en haut de page. Garde le prix et le bouton bien visibles en haut, c'est là que se joue la vente.", 25);
+    if ((c.sales || {}).review) add("warn", c.sales.review + " paiement(s) Wave à vérifier", "Ouvre l'onglet Ventes Wave et valide-les : le client attend son lien de téléchargement.", 95);
+    if (V >= 20 && c.returning && pct(c.returning, V) > 20) add("good", p0(pct(c.returning, V)) + " des visiteurs reviennent", "Ils hésitent : un rappel (« plus que 3 jours au prix bêta ») sur WhatsApp et en story peut les décider.", 30);
+    if (!out.length) add("good", "Rien d'inquiétant sur cette période", "Continue le calendrier éditorial et reviens dans quelques jours.", 0);
+    out.sort(function (a, b) { return b.w - a.w; });
+    var IC = { good: "✓", warn: "!", bad: "↓", info: "i" }, LB = { good: "bon", warn: "à surveiller", bad: "à corriger", info: "info" };
+    out.slice(0, 8).forEach(function (o) {
+      host.appendChild(el("div", { "class": "ins " + o.level }, [el("span", { "class": "ic", "aria-hidden": "true", text: IC[o.level] }),
+        el("b", {}, [o.title, el("span", { "class": "tag", text: LB[o.level] })]), el("p", { text: o.text })]));
+    });
+  }
+
+  // ---------- liens à partager
+  function link(src, med, camp, cont) {
+    var q = "utm_source=" + encodeURIComponent(src) + "&utm_medium=" + encodeURIComponent(med);
+    if (camp) q += "&utm_campaign=" + encodeURIComponent(camp); if (cont) q += "&utm_content=" + encodeURIComponent(cont);
+    return SITE + "?" + q;
+  }
+  function slug(s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+  function copyBtn(text) {
+    var b = el("button", { "class": "copy", type: "button", text: "Copier" });
+    b.addEventListener("click", function () { try { navigator.clipboard.writeText(text).then(function () { b.textContent = "Copié"; setTimeout(function () { b.textContent = "Copier"; }, 1400); }); } catch (e) {} });
+    return b;
+  }
+  function row(host, label, url) { host.appendChild(el("div", { "class": "row" }, [el("span", { text: label }), el("code", { text: url }), copyBtn(url)])); }
+  function buildLinks() {
+    var bio = $("bioLinks"); [["Instagram", "instagram"], ["TikTok", "tiktok"], ["YouTube", "youtube"], ["LinkedIn", "linkedin"], ["WhatsApp (profil / chaîne)", "whatsapp"], ["Facebook", "facebook"], ["X / Threads", "x"], ["Behance", "behance"]]
+      .forEach(function (b) { row(bio, b[0], link(b[1], "bio")); });
+    var P = [["S1 · Lun 16/11 · 2 heures ou 1 clic", "tiktok", "bio"], ["S1 · Mar 17/11 · La même pub 4 fois", "linkedin", "post"], ["S1 · Mer 18/11 · 3 erreurs en 9:16", "instagram", "bio"],
+      ["S1 · Jeu 19/11 · Sondage déclinaison", "facebook", "post"], ["S1 · Ven 20/11 · Ça tient en 9:16 ?", "tiktok", "bio"], ["S1 · Sam 21/11 · Bêta ouverte", "whatsapp", "story"],
+      ["S2 · Lun 23/11 · 1 compo, 4 formats", "instagram", "bio"], ["S2 · Mar 24/11 · Carrousel avant-après", "linkedin", "post"], ["S2 · Mer 25/11 · Installer Flip", "youtube", "bio"],
+      ["S2 · Jeu 26/11 · Comment Flip recompose", "discord", "post"], ["S2 · Ven 27/11 · Le défi", "tiktok", "bio"], ["S2 · Sam 28/11 · Live", "instagram", "story"],
+      ["S3 · Lun 30/11 · Témoignage", "instagram", "bio"], ["S3 · Mar 01/12 · Ce que la bêta m'a appris", "linkedin", "post"], ["S3 · Mer 02/12 · FAQ", "tiktok", "bio"],
+      ["S3 · Jeu 03/12 · Ils l'utilisent déjà", "whatsapp", "story"], ["S3 · Ven 04/12 · Flip arrive sur Illustrator", "instagram", "bio"], ["S3 · Sam 05/12 · 5 projets", "x", "post"],
+      ["S4 · Lun 07/12 · Le prix bêta augmente", "whatsapp", "story"], ["S4 · Mar 08/12 · Le calcul", "linkedin", "post"], ["S4 · Mer 09/12 · Arrête de refaire ta compo", "tiktok", "bio"],
+      ["S4 · Jeu 10/12 · Plus que 3 jours", "whatsapp", "story"], ["S4 · Ven 11/12 · Ce qu'ils en disent", "instagram", "bio"], ["S4 · Sam 12/12 · Dernier jour", "whatsapp", "story"]];
+    var pl = $("postLinks");
+    P.forEach(function (p) {
+      var name = p[0], camp = slug(name.replace(/^S(\d) · (\w+) [\d/]+ · /, "s$1-$2-"));
+      row(pl, name + (p[2] === "bio" ? " (lien de bio du jour)" : ""), link(p[1], p[2], camp));
+    });
+    function upd() { $("bOut").textContent = link($("bSrc").value, $("bMed").value, slug($("bCamp").value), slug($("bCont").value)); }
+    ["bSrc", "bMed", "bCamp", "bCont"].forEach(function (i) { $(i).addEventListener("input", upd); });
+    $("bCopy").addEventListener("click", function () { try { navigator.clipboard.writeText($("bOut").textContent); $("bCopy").textContent = "Copié"; setTimeout(function () { $("bCopy").textContent = "Copier le lien"; }, 1400); } catch (e) {} });
+    upd();
+  }
+
+  // ---------- interactions
+  Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function (b) {
+    b.addEventListener("click", function () { days = +b.dataset.d; Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); }); load(); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".tabs button"), function (b) {
+    b.addEventListener("click", function () { Array.prototype.forEach.call(document.querySelectorAll(".tabs button"), function (x) { x.setAttribute("aria-selected", x === b ? "true" : "false"); });
+      $("tab-vue").hidden = b.dataset.tab !== "vue"; $("tab-liens").hidden = b.dataset.tab !== "liens"; });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".toggle"), function (b) {
+    b.addEventListener("click", function () { var t = $(b.dataset.table); t.hidden = !t.hidden; b.textContent = t.hidden ? "Voir en tableau" : "Masquer le tableau"; });
+  });
+  $("reload").addEventListener("click", load);
+  $("login").addEventListener("submit", function (e) { e.preventDefault(); token = $("tokIn").value.trim(); $("loginErr").hidden = true; try { localStorage.setItem(KEY, token); } catch (x) {} load(); });
+  buildLinks();
+  if (token) load(); else $("login").hidden = false;
+  setInterval(function () { if (token && !$("app").hidden && !document.hidden) load(); }, 60000);
+})();
+</script>
+</body>
+</html>
