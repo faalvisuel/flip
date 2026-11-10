@@ -217,6 +217,12 @@
   .dlg .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
   .close { align-self: flex-end; border: 0; background: transparent; font: 500 14px/1 var(--ui); color: var(--muted); cursor: pointer; padding: 6px; }
   .close:hover { color: var(--ink); }
+  .fld { display: flex; flex-direction: column; gap: 6px; font: 600 13px/1.2 var(--ui); color: var(--ink-2); }
+  .fld input { font: 500 16px/1.2 var(--ui); color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 13px 14px; outline: none; }
+  .fld input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(224, 33, 63, .18); }
+  .ferr { font-size: 13px; color: #c0392b !important; }
+  #stepProof { display: flex; flex-direction: column; gap: 14px; }
+  button.pill { font-family: var(--display); }
 
   @media (max-width: 860px) {
     .links { display: none; }
@@ -395,23 +401,38 @@
 <dialog id="buy" aria-labelledby="buyTitle">
   <div class="dlg">
     <button class="close" type="button" id="buyClose">Fermer</button>
-    <h3 id="buyTitle">Choisis ton moyen de paiement</h3>
-    <div class="row" style="flex-direction:column;align-items:stretch;gap:10px">
-      <a class="pill" id="gumroadGo" href="https://faalv.gumroad.com/l/gswjfo" target="_blank" rel="noopener" style="background:#000;color:#fff;justify-content:center;gap:10px">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2.5" fill="#fff"/><rect x="2" y="8.3" width="20" height="3" fill="#000"/><rect x="4.5" y="14" width="6" height="2" rx="1" fill="#000"/></svg>
-        Par carte<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
-      </a>
-      <a class="pill red" id="waveGo" href="#" style="justify-content:center;gap:10px">
-        <img src="assets/wave-icon.png" alt="" width="22" height="22" style="border-radius:50%;display:block" aria-hidden="true">
-        Par Wave<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
-      </a>
+
+    <div id="stepChoose">
+      <h3 id="buyTitle">Choisis ton moyen de paiement</h3>
+      <div class="row" style="flex-direction:column;align-items:stretch;gap:10px;margin-top:14px">
+        <a class="pill" id="gumroadGo" href="https://faalv.gumroad.com/l/gswjfo" target="_blank" rel="noopener" style="background:#000;color:#fff;justify-content:center;gap:10px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2.5" fill="#fff"/><rect x="2" y="8.3" width="20" height="3" fill="#000"/><rect x="4.5" y="14" width="6" height="2" rx="1" fill="#000"/></svg>
+          Par carte<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
+        <a class="pill red" id="waveGo" href="https://pay.wave.com/m/M_sn_epQ7lFDO_gRz/c/sn/?amount=2000" target="_blank" rel="noopener" style="justify-content:center;gap:10px">
+          <img src="assets/wave-icon.png" alt="" width="22" height="22" style="border-radius:50%;display:block" aria-hidden="true">
+          Par Wave<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-top:12px">Par carte, Flip t'est envoyé automatiquement par email. Par Wave, tu paies <b>2000 FCFA</b> puis tu nous donnes l'identifiant de ta transaction.</p>
     </div>
-    <ol style="margin-top:14px">
-      <li>Avec Wave : tu es redirigé vers Wave avec le montant déjà indiqué. Valide le paiement de <b>2000 FCFA</b>.</li>
-      <li>Tu reviens automatiquement sur le site.</li>
-      <li>Le lien de téléchargement de Flip apparaît dès que le paiement est confirmé (quelques secondes).</li>
-    </ol>
-    <p id="buyErr" hidden style="font-size:13px;color:#c0392b">Le paiement automatique est momentanément indisponible. <a id="proof" href="#" target="_blank" rel="noopener" style="color:var(--ink)">Envoie ton reçu Wave sur WhatsApp</a> et on te livre Flip à la main.</p>
+
+    <form id="stepProof" hidden novalidate>
+      <h3>Dernière étape</h3>
+      <p>Une fois les <b>2000 FCFA</b> payés sur Wave, ouvre le reçu dans ton app Wave et recopie l'<b>identifiant de transaction</b> (il commence par <code>T_</code>).</p>
+      <label class="fld">Identifiant de transaction Wave
+        <input id="txIn" name="tx" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="T_XXXXXXXXXXXXXX" required>
+      </label>
+      <label class="fld">Ton numéro WhatsApp
+        <input id="telIn" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="77 123 45 67" required>
+      </label>
+      <p id="proofErr" class="ferr" hidden></p>
+      <div class="row" style="flex-direction:column;align-items:stretch">
+        <button class="pill red" id="proofSend" type="submit" style="justify-content:center">Valider mon paiement<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></button>
+      </div>
+      <p style="font-size:13px;color:var(--muted)">Pas encore payé ? <a id="waveAgain" href="https://pay.wave.com/m/M_sn_epQ7lFDO_gRz/c/sn/?amount=2000" target="_blank" rel="noopener" style="color:var(--ink)">Rouvrir le paiement Wave</a> · <a href="#" id="backChoose" style="color:var(--ink)">Retour</a></p>
+    </form>
+
     <p style="font-size:13px;color:var(--muted)">En payant, tu acceptes les <a href="legal.html#cgv" style="color:var(--ink)">conditions générales de vente</a>. Prix de la bêta, il augmentera avec les prochaines versions.</p>
   </div>
 </dialog>
@@ -419,36 +440,56 @@
 <script>
 (function () {
   var FN_BASE = "https://mqgjwyqpibbthfgcthva.supabase.co/functions/v1";
-  var WAVE_LINK_FALLBACK = "https://pay.wave.com/m/M_sn_epQ7lFDO_gRz/c/sn/?amount=2000";
   var dlg = document.getElementById("buy");
   var go = document.getElementById("waveGo");
-  var errBox = document.getElementById("buyErr");
-  var WA_PROOF = "https://wa.me/221774847284?text=" + encodeURIComponent("Bonjour, je viens de payer Flip (2000 FCFA) avec Wave. Voici mon reçu :");
-  document.getElementById("proof").href = WA_PROOF;
+  var stepChoose = document.getElementById("stepChoose");
+  var stepProof = document.getElementById("stepProof");
+  var txIn = document.getElementById("txIn");
+  var telIn = document.getElementById("telIn");
+  var proofErr = document.getElementById("proofErr");
+  var proofSend = document.getElementById("proofSend");
 
+  function showStep(proof) {
+    stepChoose.hidden = proof;
+    stepProof.hidden = !proof;
+    proofErr.hidden = true;
+  }
   function openBuy(e) {
     e.preventDefault();
-    errBox.hidden = true;
-    if (dlg.showModal) dlg.showModal(); else go.click();
+    showStep(false);
+    if (dlg.showModal) dlg.showModal(); else window.open(go.href, "_blank");
   }
   Array.prototype.forEach.call(document.querySelectorAll(".try"), function (a) { a.addEventListener("click", openBuy); });
   document.getElementById("buyClose").addEventListener("click", function () { dlg.close(); });
   dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+  document.getElementById("backChoose").addEventListener("click", function (e) { e.preventDefault(); showStep(false); });
 
-  var useFallback = false;
-  go.addEventListener("click", function (e) {
-    if (useFallback) return; // lien direct vers Wave (bouton redevenu un lien normal)
+  // Par Wave : le lien de paiement s'ouvre dans un nouvel onglet (comportement normal du lien),
+  // et le panneau passe à l'étape « identifiant de transaction ».
+  go.addEventListener("click", function () { setTimeout(function () { showStep(true); txIn.focus(); }, 50); });
+
+  var ERR = {
+    tx_invalide: "Cet identifiant ne ressemble pas à un identifiant Wave. Il commence par T_ (ex. T_AB12CD34EF56GH78).",
+    tel_invalide: "Vérifie ton numéro WhatsApp.",
+    tx_deja_utilise: "Cet identifiant de transaction a déjà été utilisé. Si c'est une erreur, écris-nous sur WhatsApp.",
+  };
+  stepProof.addEventListener("submit", function (e) {
     e.preventDefault();
-    go.classList.add("busy");
-    fetch(FN_BASE + "/create-checkout", { method: "POST" })
-      .then(function (r) { return r.json().then(function (d) { if (!r.ok || !d.wave_launch_url) throw new Error("no_url"); return d; }); })
-      .then(function (d) { window.location.href = d.wave_launch_url; })
-      .catch(function () {
-        go.classList.remove("busy");
-        errBox.hidden = false;
-        go.href = WAVE_LINK_FALLBACK;
-        go.target = "_blank";
-        useFallback = true;
+    proofErr.hidden = true;
+    var tx = txIn.value.trim().toUpperCase().replace(/\s+/g, "");
+    if (!/^T_[A-Z0-9]{8,24}$/.test(tx)) { proofErr.textContent = ERR.tx_invalide; proofErr.hidden = false; return; }
+    if (telIn.value.replace(/\D/g, "").length < 8) { proofErr.textContent = ERR.tel_invalide; proofErr.hidden = false; return; }
+    proofSend.classList.add("busy");
+    fetch(FN_BASE + "/submit-proof", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ tx: tx, phone: telIn.value }) })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok || !res.d.ref) throw new Error(res.d.error || "serveur");
+        window.location.href = "merci.html?ref=" + encodeURIComponent(res.d.ref) + "&tx=" + encodeURIComponent(tx);
+      })
+      .catch(function (err) {
+        proofSend.classList.remove("busy");
+        proofErr.textContent = ERR[err.message] || "Impossible d'envoyer pour le moment. Réessaie, ou écris-nous sur WhatsApp au 77 484 72 84.";
+        proofErr.hidden = false;
       });
   });
 

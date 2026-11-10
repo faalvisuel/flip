@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ventes Wave — Flip</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --page: #EFEDEE; --paper: #FAF9F9; --card: #FFFFFF; --ink: #0A0A0B; --ink-2: #3F3A3C; --muted: #6E6668;
+    --line: #DCD7D8; --red: #E0213F; --green: #157F3B; --green-bg: #E3F4E8; --amber-bg: #FFF2D6; --amber: #8A5A00;
+    --display: "Space Grotesk", "Inter", system-ui, sans-serif; --ui: "Inter", system-ui, -apple-system, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --page: #110A0B; --paper: #170D0F; --card: #221216; --ink: #F4F2F2; --ink-2: #D9CCCE; --muted: #A8989B;
+      --line: rgba(255,255,255,.14); --green: #6FD38F; --green-bg: rgba(111,211,143,.12); --amber-bg: rgba(255,200,90,.12); --amber: #FFC85A; color-scheme: dark; }
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 var(--ui); -webkit-font-smoothing: antialiased; }
+  main { max-width: 760px; margin: 0 auto; padding: 28px 16px 60px; }
+  h1 { font: 700 28px/1.1 var(--display); letter-spacing: -.6px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 22px; font-size: 14px; }
+  .bar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+  .tab { border: 1px solid var(--line); background: var(--card); color: var(--ink-2); border-radius: 999px; padding: 8px 14px; font: 600 13px/1 var(--ui); cursor: pointer; }
+  .tab[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .spacer { flex: 1; }
+  .ghost { border: 0; background: none; color: var(--muted); font: 500 13px/1 var(--ui); cursor: pointer; padding: 8px; }
+  .item { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px 18px; display: grid; gap: 10px; margin-bottom: 10px; }
+  .top { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .tx { font: 600 16px/1.2 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .2px; word-break: break-all; }
+  .badge { font: 600 11px/1 var(--ui); text-transform: uppercase; letter-spacing: .4px; padding: 5px 8px; border-radius: 999px; }
+  .b-review { background: var(--amber-bg); color: var(--amber); }
+  .b-paid { background: var(--green-bg); color: var(--green); }
+  .b-rejected { background: rgba(224,33,63,.12); color: var(--red); }
+  .meta { color: var(--muted); font-size: 13px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .meta a { color: var(--ink-2); }
+  .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { border: 0; border-radius: 999px; padding: 10px 16px; font: 600 14px/1 var(--display); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .ok { background: var(--green); color: #fff; }
+  .no { background: transparent; color: var(--red); box-shadow: inset 0 0 0 1px var(--line); }
+  .wa { background: #1FAF54; color: #fff; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 0; }
+  .login { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px; display: grid; gap: 12px; }
+  .login input { font: 500 15px/1.2 ui-monospace, Menlo, monospace; padding: 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
+  .err { color: var(--red); font-size: 13px; }
+  @media (prefers-color-scheme: dark) { .ok { color: #0A0A0B; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Ventes Wave</h1>
+  <p class="sub">Vérifie chaque identifiant dans ton portail Wave (Transactions), puis valide. Le client voit son lien de téléchargement dès la validation.</p>
+
+  <form class="login" id="login" hidden>
+    <b>Code d'accès vendeur</b>
+    <input id="tokIn" autocomplete="off" spellcheck="false" placeholder="Colle ton code d'accès">
+    <button class="btn ok" type="submit" style="justify-self:start">Ouvrir</button>
+    <span class="err" id="loginErr" hidden>Code incorrect.</span>
+  </form>
+
+  <section id="app" hidden>
+    <div class="bar">
+      <button class="tab" data-f="review" aria-pressed="true">À vérifier <span id="nReview"></span></button>
+      <button class="tab" data-f="paid" aria-pressed="false">Validées</button>
+      <button class="tab" data-f="rejected" aria-pressed="false">Refusées</button>
+      <span class="spacer"></span>
+      <a class="ghost" href="https://business.wave.com/transactions" target="_blank" rel="noopener">Ouvrir Wave ↗</a>
+      <button class="ghost" id="reload">Actualiser</button>
+    </div>
+    <div id="list"></div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var FN = "https://mqgjwyqpibbthfgcthva.supabase.co/functions/v1/admin-review";
+  var SITE = "https://faalvisuel.github.io/flip/";
+  var KEY = "flip-admin-token";
+  var $ = function (id) { return document.getElementById(id); };
+  var token = "";
+  var items = [];
+  var filter = "review";
+
+  // Le code peut arriver par le lien (#t=...) : on le garde dans ce navigateur puis on l'efface de l'adresse.
+  var m = location.hash.match(/t=([a-f0-9]{16,})/i);
+  if (m) { token = m[1]; try { localStorage.setItem(KEY, token); } catch (e) {} history.replaceState(null, "", location.pathname); }
+  if (!token) { try { token = localStorage.getItem(KEY) || ""; } catch (e) {} }
+
+  function api(method, body) {
+    return fetch(FN, { method: method, headers: { "Content-Type": "application/json", "x-admin-token": token }, body: body ? JSON.stringify(body) : undefined })
+      .then(function (r) { return r.json().then(function (d) { if (r.status === 401) throw new Error("auth"); if (!r.ok) throw new Error(d.error || "err"); return d; }); });
+  }
+
+  function waNumber(p) {
+    var d = String(p || "").replace(/\D/g, "");
+    if (d.length === 9) d = "221" + d;          // numéro sénégalais sans indicatif
+    if (d.indexOf("00") === 0) d = d.slice(2);
+    return d;
+  }
+  function when(iso) {
+    var d = new Date(iso);
+    return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" }) + " · " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function render() {
+    var n = items.filter(function (i) { return i.status === "review"; }).length;
+    $("nReview").textContent = n ? "(" + n + ")" : "";
+    document.title = (n ? "(" + n + ") " : "") + "Ventes Wave — Flip";
+    var list = $("list"); list.textContent = "";
+    var rows = items.filter(function (i) { return i.status === filter; });
+    if (!rows.length) { list.appendChild(el("p", "empty", filter === "review" ? "Rien à vérifier pour le moment." : "Aucune vente ici.")); return; }
+    rows.forEach(function (i) {
+      var card = el("div", "item");
+      var top = el("div", "top");
+      top.appendChild(el("span", "tx", i.wave_tx_id));
+      top.appendChild(el("span", "badge b-" + i.status, { review: "À vérifier", paid: "Validée", rejected: "Refusée" }[i.status] || i.status));
+      card.appendChild(top);
+      var meta = el("div", "meta");
+      meta.appendChild(el("span", null, (i.amount || "2000") + " FCFA"));
+      meta.appendChild(el("span", null, when(i.created_at)));
+      var tel = el("a", null, i.client_phone); tel.href = "https://wa.me/" + waNumber(i.client_phone); tel.target = "_blank"; tel.rel = "noopener";
+      meta.appendChild(tel);
+      card.appendChild(meta);
+
+      var acts = el("div", "acts");
+      var link = SITE + "merci.html?ref=" + i.id + "&tx=" + encodeURIComponent(i.wave_tx_id);
+      if (i.status === "review") {
+        var ok = el("button", "btn ok", "Valider");
+        var no = el("button", "btn no", "Refuser");
+        ok.onclick = function () { decide(i, "approve", ok, no); };
+        no.onclick = function () { if (confirm("Refuser la transaction " + i.wave_tx_id + " ?")) decide(i, "reject", ok, no); };
+        acts.appendChild(ok); acts.appendChild(no);
+      } else if (i.status === "paid") {
+        var wa = el("a", "btn wa", "Envoyer le lien sur WhatsApp");
+        wa.href = "https://wa.me/" + waNumber(i.client_phone) + "?text=" + encodeURIComponent("Merci pour ton achat de Flip ! Ton paiement Wave (" + i.wave_tx_id + ") est validé. Télécharge Flip ici : " + link);
+        wa.target = "_blank"; wa.rel = "noopener";
+        acts.appendChild(wa);
+      }
+      if (acts.childNodes.length) card.appendChild(acts);
+      list.appendChild(card);
+    });
+  }
+
+  function decide(i, action, a, b) {
+    a.disabled = b.disabled = true;
+    api("POST", { ref: i.id, action: action })
+      .then(function (d) {
+        i.status = d.status;
+        if (d.status === "paid") { filter = "paid"; syncTabs(); }
+        render();
+      })
+      .catch(function () { a.disabled = b.disabled = false; alert("Échec, réessaie."); });
+  }
+
+  function load() {
+    return api("GET").then(function (d) { items = d.items || []; $("login").hidden = true; $("app").hidden = false; render(); })
+      .catch(function (e) {
+        if (e.message === "auth") { try { localStorage.removeItem(KEY); } catch (x) {} $("app").hidden = true; $("login").hidden = false; if (token) $("loginErr").hidden = false; }
+      });
+  }
+  function syncTabs() { Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (t) { t.setAttribute("aria-pressed", t.dataset.f === filter ? "true" : "false"); }); }
+
+  Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (t) {
+    t.addEventListener("click", function () { filter = t.dataset.f; syncTabs(); render(); });
+  });
+  $("reload").addEventListener("click", load);
+  $("login").addEventListener("submit", function (e) {
+    e.preventDefault(); token = $("tokIn").value.trim(); $("loginErr").hidden = true;
+    try { localStorage.setItem(KEY, token); } catch (x) {}
+    load();
+  });
+
+  if (token) load(); else $("login").hidden = false;
+  setInterval(function () { if (token && !$("app").hidden) load(); }, 30000);
+})();
+</script>
+</body>
+</html>

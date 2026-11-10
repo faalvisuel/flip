@@ -43,6 +43,18 @@
       <a class="pill red" id="dl" href="#">Télécharger Flip</a>
       <span class="muted-link">Le lien a expiré ? <a href="#" id="refresh">Clique ici pour le régénérer</a>.</span>
     </div>
+    <div id="review" hidden>
+      <div class="spin"></div>
+      <h1>Paiement reçu, vérification en cours</h1>
+      <p>On vérifie ta transaction <b id="txShow"></b> dans Wave. Dès qu'elle est validée, le bouton de téléchargement apparaît ici et on t'envoie aussi le lien sur WhatsApp.</p>
+      <a class="pill red" id="waNotify" href="#" target="_blank" rel="noopener">Prévenir sur WhatsApp pour aller plus vite</a>
+      <span class="muted-link">Tu peux fermer cette page : <a href="#" id="keepLink">garde ce lien</a>, il affichera ton téléchargement dès la validation.</span>
+    </div>
+    <div id="rejected" hidden>
+      <h1 class="err">Transaction non retrouvée</h1>
+      <p>On n'a pas trouvé ce paiement dans Wave. Si tu as bien payé, envoie-nous la capture de ton reçu et on règle ça tout de suite.</p>
+      <a class="pill" id="waReject" href="#" target="_blank" rel="noopener">Envoyer mon reçu sur WhatsApp</a>
+    </div>
     <div id="failed" hidden>
       <h1 class="err">Paiement non confirmé</h1>
       <p>Si tu as bien payé, envoie-nous ton reçu et on te livre Flip à la main.</p>
@@ -53,34 +65,45 @@
 <script>
 (function () {
   var FN_BASE = "https://mqgjwyqpibbthfgcthva.supabase.co/functions/v1";
-  var ref = new URLSearchParams(location.search).get("ref");
-  var waiting = document.getElementById("waiting"), ready = document.getElementById("ready"), failed = document.getElementById("failed");
-  document.getElementById("waBtn").href = "https://wa.me/221774847284?text=" + encodeURIComponent("Bonjour, je viens de payer Flip avec Wave (réf: " + (ref || "?") + "). Voici mon reçu :");
+  var WA = "https://wa.me/221774847284?text=";
+  var q = new URLSearchParams(location.search);
+  var ref = q.get("ref");
+  var tx = q.get("tx") || "";
+  var $ = function (id) { return document.getElementById(id); };
+  var panels = ["waiting", "review", "ready", "failed", "rejected"];
+  function show(id) { panels.forEach(function (p) { $(p).hidden = p !== id; }); }
 
-  if (!ref) { waiting.hidden = true; failed.hidden = false; return; }
+  var refTxt = (tx ? "transaction " + tx + ", " : "") + "réf " + (ref || "?");
+  $("waBtn").href = WA + encodeURIComponent("Bonjour, je viens de payer Flip avec Wave (" + refTxt + "). Voici mon reçu :");
+  $("waReject").href = $("waBtn").href;
+  $("waNotify").href = WA + encodeURIComponent("Bonjour, je viens de payer Flip (2000 FCFA) avec Wave. Identifiant de transaction : " + (tx || "?") + " — réf " + (ref || "?") + ".");
+  $("txShow").textContent = tx || "";
+  $("keepLink").href = location.href;
+  $("keepLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    try { navigator.clipboard.writeText(location.href).then(function () { $("keepLink").textContent = "lien copié"; }); } catch (err) {}
+  });
 
-  var tries = 0, maxTries = 30; // ~60s
+  if (!ref) { show("failed"); return; }
+
+  var tries = 0;
   function check() {
     tries++;
     fetch(FN_BASE + "/get-download?ref=" + encodeURIComponent(ref))
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d.status === "paid" && d.url) {
-          waiting.hidden = true; ready.hidden = false;
-          document.getElementById("dl").href = d.url;
-        } else if (d.status === "failed" || d.status === "introuvable") {
-          waiting.hidden = true; failed.hidden = false;
-        } else if (tries < maxTries) {
-          setTimeout(check, 2000);
-        } else {
-          waiting.hidden = true; failed.hidden = false;
-        }
+        if (d.status === "paid" && d.url) { show("ready"); $("dl").href = d.url; return; }
+        if (d.status === "paid") { show("failed"); return; } // payé mais fichier indisponible côté serveur
+        if (d.status === "review") { show("review"); setTimeout(check, 10000); return; }
+        if (d.status === "rejected") { show("rejected"); return; }
+        if (d.status === "failed" || d.status === "introuvable") { show("failed"); return; }
+        if (tries < 30) setTimeout(check, 2000); else show("failed");
       })
-      .catch(function () { if (tries < maxTries) setTimeout(check, 2000); else { waiting.hidden = true; failed.hidden = false; } });
+      .catch(function () { setTimeout(check, tries < 30 ? 2000 : 10000); });
   }
   check();
 
-  document.getElementById("refresh").addEventListener("click", function (e) { e.preventDefault(); ready.hidden = true; waiting.hidden = false; tries = 0; check(); });
+  $("refresh").addEventListener("click", function (e) { e.preventDefault(); show("waiting"); tries = 0; check(); });
 })();
 </script>
 </body>
