@@ -76,7 +76,7 @@
   var refTxt = (tx ? "transaction " + tx + ", " : "") + "réf " + (ref || "?");
   $("waBtn").href = WA + encodeURIComponent("Bonjour, je viens de payer Flip avec Wave (" + refTxt + "). Voici mon reçu :");
   $("waReject").href = $("waBtn").href;
-  $("waNotify").href = WA + encodeURIComponent("Bonjour, je viens de payer Flip (2000 FCFA) avec Wave. Identifiant de transaction : " + (tx || "?") + " — réf " + (ref || "?") + ".");
+  $("waNotify").href = WA + encodeURIComponent("Bonjour, je viens de payer Flip (1000 FCFA) avec Wave. Identifiant de transaction : " + (tx || "?") + " — réf " + (ref || "?") + ".");
   $("txShow").textContent = tx || "";
   $("keepLink").href = location.href;
   $("keepLink").addEventListener("click", function (e) {

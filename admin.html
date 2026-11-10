@@ -123,7 +123,7 @@
       top.appendChild(el("span", "badge b-" + i.status, { review: "À vérifier", paid: "Validée", rejected: "Refusée" }[i.status] || i.status));
       card.appendChild(top);
       var meta = el("div", "meta");
-      meta.appendChild(el("span", null, (i.amount || "2000") + " FCFA"));
+      meta.appendChild(el("span", null, (i.amount || "1000") + " FCFA"));
       meta.appendChild(el("span", null, when(i.created_at)));
       var tel = el("a", null, i.client_phone); tel.href = "https://wa.me/" + waNumber(i.client_phone); tel.target = "_blank"; tel.rel = "noopener";
       meta.appendChild(tel);
