@@ -141,7 +141,7 @@
   .sel b { font: inherit; }
   .lead { margin: 0; max-width: 56ch; color: var(--ink-2); font-size: 18px; }
   .cta { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-  .price-note { margin: 0; font-size: 14px; color: var(--muted); }
+  .price-note { margin: 0; font-size: 14px; color: var(--muted); max-width: 480px; text-align: center; text-wrap: balance; }
   .price-note strong { color: var(--ink); font-family: var(--display); }
 
   /* Vidéo dans un cadre épais, comme la bande photo de la réf. */
@@ -377,9 +377,10 @@
       <p class="lead">Flip décline ta compo en 9:16, 4:5, 1:1 ou 16:9 en un clic. Textes, images, précomps et groupes de Nulls sont réorganisés et centrés, sans rien couper ni dénaturer.</p>
       <div class="cta">
         <a class="pill primary try" data-track="cta-haut" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+        <a class="pill light" data-track="cta-carte-haut" href="https://faalv.gumroad.com/l/gswjfo" target="_blank" rel="noopener">Payer par carte<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg></span></a>
         <a class="pill light" data-track="voir-demo" href="#demo">Voir la démo<span class="dot"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span></a>
       </div>
-      <p class="price-note"><strong>1000 FCFA</strong> · prix de la bêta, il augmentera avec les prochaines versions.</p>
+      <p class="price-note"><strong>1000 FCFA</strong> avec Wave · ou par carte bancaire (Visa, Mastercard) via Gumroad. Prix de la bêta, il augmentera avec les prochaines versions.</p>
     </header>
 
     <div class="stage" id="demo" data-section="2 · Démo">
@@ -513,7 +514,10 @@
         <h2>Essaie Flip sur tes projets.</h2>
         <p>1000 FCFA pendant la bêta. Le prix augmentera avec les prochaines versions.</p>
       </div>
+      <div class="cta" style="justify-content:flex-start">
+      <a class="pill light" data-track="cta-carte-final" href="https://faalv.gumroad.com/l/gswjfo" target="_blank" rel="noopener">Par carte<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg></span></a>
       <a class="pill primary try" data-track="cta-final" href="https://minalab.app/ebooks/flip-0701">Essayer Flip<span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+      </div>
     </div>
   </div>
   <footer>
