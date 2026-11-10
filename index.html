@@ -116,8 +116,23 @@
 
   /* Hero */
   .hero { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px; padding: 64px 24px 40px; }
-  .tag { display: inline-flex; align-items: center; gap: 8px; font: 600 12px/1 var(--display); letter-spacing: .3px; color: var(--bordeaux); background: #F8DCE1; border: 1px solid #F0B9C3; border-radius: 999px; padding: 8px 12px; }
-  .tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--red); display: block; }
+  /* Étiquette de section : repères de recadrage aux 4 coins + le format en mono, comme un cadre de calque. */
+  .tag {
+    --c: var(--red); --k: 9px; --t: 1.5px;
+    display: inline-flex; align-items: baseline; gap: 10px; padding: 8px 13px;
+    font: 600 14px/1 var(--display); letter-spacing: -.1px; color: var(--ink); align-self: flex-start;
+    background:
+      linear-gradient(var(--c), var(--c)) left top / var(--k) var(--t),
+      linear-gradient(var(--c), var(--c)) left top / var(--t) var(--k),
+      linear-gradient(var(--c), var(--c)) right top / var(--k) var(--t),
+      linear-gradient(var(--c), var(--c)) right top / var(--t) var(--k),
+      linear-gradient(var(--c), var(--c)) left bottom / var(--k) var(--t),
+      linear-gradient(var(--c), var(--c)) left bottom / var(--t) var(--k),
+      linear-gradient(var(--c), var(--c)) right bottom / var(--k) var(--t),
+      linear-gradient(var(--c), var(--c)) right bottom / var(--t) var(--k);
+    background-repeat: no-repeat;
+  }
+  .tag b { font: 500 11px/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .2px; color: var(--red); }
   h1 { margin: 0; font: 700 clamp(44px, 7.4vw, 92px)/1 var(--display); letter-spacing: -.045em; text-wrap: balance; max-width: 15ch; }
   .sel { position: relative; display: inline-block; padding: 0 .12em; margin: 0 .04em; color: var(--red); background: rgba(224, 33, 63, .08); outline: 2px solid var(--red); }
   .sel::before, .sel::after, .sel b::before, .sel b::after { content: ""; position: absolute; width: 11px; height: 11px; background: var(--card); border: 2px solid var(--red); }
@@ -151,7 +166,8 @@
 
   /* Section sombre */
   .dark { margin: 0 24px; background: var(--night); color: var(--on-dark); border-radius: var(--r-xl); padding: 56px 48px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; }
-  .dark .tag { background: rgba(224, 33, 63, .18); border-color: rgba(224, 33, 63, .45); color: #FF9AAB; }
+  .dark .tag { color: var(--on-dark); --c: #FF4D66; }
+  .dark .tag b { color: #FF7A8E; }
   h2 { margin: 0; font: 700 clamp(32px, 4vw, 48px)/1.05 var(--display); letter-spacing: -.035em; text-wrap: balance; }
   .feat { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 28px; }
   .feat li { min-width: 0; }
@@ -272,7 +288,6 @@
     </nav>
 
     <header class="hero" id="essayer">
-      <span class="tag"><i></i>Bêta 4.1 · Plugin After Effects</span>
       <h1>Change de format. Garde <span class="sel"><b>tout.</b></span></h1>
       <p class="lead">Flip décline ta compo en 9:16, 4:5, 1:1 ou 16:9 en un clic. Textes, images, précomps et groupes de Nulls sont réorganisés et centrés, sans rien couper ni dénaturer.</p>
       <div class="cta">
@@ -307,7 +322,7 @@
 
     <section class="dark" id="pourquoi">
       <div>
-        <span class="tag"><i></i>Pourquoi Flip</span>
+        <span class="tag"><b>16:9</b>Pourquoi Flip</span>
         <h2 style="margin-top:16px">Pensé pour les vrais projets.</h2>
         <ul class="feat">
           <li><b>Rien n'est coupé</b><span>Chaque bloc est calé dans sa case : aucun élément ne déborde ni ne se superpose.</span></li>
@@ -326,7 +341,7 @@
     <section class="voices" id="avis">
       <div class="head">
         <div>
-          <span class="tag"><i></i>Retours de la bêta</span>
+          <span class="tag"><b>9:16</b>Retours de la bêta</span>
           <h2 style="margin-top:14px">Ce qu'en disent les motion designers.</h2>
         </div>
         <p style="margin:0;color:var(--muted);font-size:14px;max-width:34ch">Seuls de vrais retours de testeurs sont publiés ici, avec leur accord.</p>
@@ -351,7 +366,7 @@
     <section class="install" id="installation">
       <div class="head">
         <div>
-          <span class="tag"><i></i>Installation</span>
+          <span class="tag"><b>4:5</b>Installation</span>
           <h2 style="margin-top:14px">Prêt en trois étapes.</h2>
         </div>
         <p style="margin:0;color:var(--muted);font-size:14px">After Effects 2019 et plus récent · macOS et Windows</p>
@@ -366,7 +381,7 @@
     <section class="feedback" id="retours">
       <div class="dash">
         <div>
-          <span class="tag"><i></i>Ton retour</span>
+          <span class="tag"><b>1:1</b>Ton retour</span>
           <h2 style="margin-top:14px;font-size:clamp(26px,3vw,34px)">Dis-nous ce qui cloche.</h2>
           <ul>
             <li>ta version d'After Effects et ton système ;</li>
