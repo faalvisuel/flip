@@ -261,6 +261,87 @@
   .voices { padding-top: 64px; }
   @media (max-width: 860px) { .final { width: calc(100% - 32px); margin-bottom: 24px !important; } }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .pill { transition: none; } }
+
+  /* ===== Style graphique Flip v2 : dégradés, halos rouges, verre, icônes 3D, vrais morceaux d'interface ===== */
+  .sheet { background:
+      radial-gradient(900px 520px at 50% -120px, rgba(224, 33, 63, .16), transparent 70%),
+      radial-gradient(600px 420px at 100% 30%, rgba(248, 220, 225, .55), transparent 70%),
+      radial-gradient(600px 420px at 0% 55%, rgba(248, 220, 225, .45), transparent 70%), var(--paper); }
+  :root[data-theme="dark"] .sheet { background: radial-gradient(900px 520px at 50% -120px, rgba(224, 33, 63, .28), transparent 70%), radial-gradient(700px 500px at 100% 40%, rgba(122, 16, 36, .45), transparent 70%), var(--paper); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .sheet { background: radial-gradient(900px 520px at 50% -120px, rgba(224, 33, 63, .28), transparent 70%), radial-gradient(700px 500px at 100% 40%, rgba(122, 16, 36, .45), transparent 70%), var(--paper); } }
+
+  .hero { position: relative; }
+  .f3d { position: absolute; width: var(--s, 110px); height: auto; pointer-events: none; user-select: none;
+         filter: drop-shadow(0 18px 22px rgba(122, 16, 36, .28)); animation: flt 7s ease-in-out infinite; z-index: 0; }
+  .hero > *:not(.f3d) { position: relative; z-index: 1; }
+  @keyframes flt { 0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); } 50% { transform: translateY(-12px) rotate(var(--r, 0deg)); } }
+  .hero .i1 { --s: 120px; --r: -12deg; left: max(2%, calc(50% - 600px)); top: 70px; }
+  .hero .i2 { --s: 92px; --r: 10deg; right: max(3%, calc(50% - 590px)); top: 40px; animation-delay: -2s; }
+  .hero .i3 { --s: 104px; --r: 8deg; left: max(5%, calc(50% - 520px)); bottom: 40px; animation-delay: -4s; }
+  .hero .i4 { --s: 118px; --r: -6deg; right: max(4%, calc(50% - 540px)); bottom: 70px; animation-delay: -1s; }
+
+  /* Pastilles « verre » (vidéo, formats) */
+  .chip { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1.5px solid rgba(255, 255, 255, .55); }
+  .chip.a { background: rgba(255, 255, 255, .82); color: var(--ink-fixed); }
+  .chip.b { background: linear-gradient(135deg, #E0213F, #FF5C77); color: #fff; border-color: rgba(255, 255, 255, .35); }
+  .chip.c { background: rgba(26, 5, 9, .78); color: #fff; border-color: rgba(255, 255, 255, .22); }
+  .frame { background: linear-gradient(140deg, #FF5C77, #E0213F 45%, #7A1024); box-shadow: 0 40px 80px -30px rgba(122, 16, 36, .55); }
+  .frame .f3d { --s: 96px; right: -40px; bottom: -44px; z-index: 2; --r: -8deg; }
+  .formats li { padding: 10px 16px; border-radius: 999px; background: var(--card); border: 1.5px solid rgba(224, 33, 63, .22); box-shadow: 0 10px 24px -14px rgba(224, 33, 63, .45); }
+  .formats li:nth-child(2) { background: linear-gradient(135deg, #E0213F, #FF5C77); color: #fff; border-color: transparent; }
+  .formats li:nth-child(2) i { border-color: #fff; }
+
+  /* Section « le panneau » : la vraie interface, en cartes flottantes */
+  .panel-sec { max-width: 1100px; margin: 0 auto; padding: 24px 24px 72px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 40px; align-items: center; }
+  .panel-sec p.lead { text-align: left; margin-top: 14px; font-size: 17px; }
+  .panel-sec .bullets { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .panel-sec .bullets span { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; background: var(--card); border: 1.5px solid rgba(224, 33, 63, .22); font: 600 14px/1 var(--display); box-shadow: 0 10px 24px -14px rgba(224, 33, 63, .45); }
+  .panel-sec .bullets img { width: 26px; height: 26px; }
+  .pstage { position: relative; min-height: 560px; border-radius: var(--r-xl); overflow: visible;
+            background: radial-gradient(420px 320px at 60% 40%, rgba(224, 33, 63, .55), transparent 70%), linear-gradient(160deg, #2A0710, #1A0509 60%, #7A1024); }
+  .pstage .panel { position: absolute; left: 50%; top: 34px; width: min(270px, 52%); transform: translateX(-50%); border-radius: 22px; border: 1.5px solid rgba(255, 255, 255, .14); box-shadow: 0 40px 70px -24px rgba(0, 0, 0, .7); }
+  .ui { position: absolute; border-radius: 16px; border: 1.5px solid rgba(255, 255, 255, .16); box-shadow: 0 28px 48px -20px rgba(0, 0, 0, .75); }
+  .ui.fmt { width: 68%; left: -6%; top: 46%; transform: rotate(-4deg); }
+  .ui.cnv { width: 58%; right: 6%; bottom: 40px; transform: rotate(3deg); border-radius: 18px; }
+  .pstage img, .panel-sec img, .stat img, .feat img { height: auto; }
+  .pstage .f3d { z-index: 3; }
+  .pstage .c1 { --s: 96px; right: -2%; bottom: -34px; --r: -10deg; }
+  .pstage .c2 { --s: 80px; right: 4%; top: 30px; --r: 12deg; animation-delay: -3s; }
+  .pstage .c3 { --s: 84px; left: 4%; top: 34px; --r: -8deg; animation-delay: -5s; }
+
+  /* Section sombre : dégradé + halo, cartes verre */
+  .dark { background: radial-gradient(520px 380px at 85% 10%, rgba(224, 33, 63, .55), transparent 70%), radial-gradient(420px 320px at 0% 100%, rgba(224, 33, 63, .35), transparent 70%), linear-gradient(150deg, #1A0509, #3A0A16 55%, #7A1024); position: relative; overflow: hidden; }
+  .feat li { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 0 12px; }
+  .feat li img { width: 46px; height: 46px; grid-row: span 2; filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .35)); }
+  .stats { background: transparent; padding: 0; gap: 14px; }
+  .stat { position: relative; background: rgba(255, 255, 255, .08); color: #fff; border: 1.5px solid rgba(255, 255, 255, .22);
+          -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 24px 40px -24px rgba(0, 0, 0, .6); text-align: left; padding: 22px 22px 22px 96px; }
+  .stat img { position: absolute; left: 14px; top: 50%; width: 70px; height: 70px; transform: translateY(-50%); filter: drop-shadow(0 10px 12px rgba(0, 0, 0, .4)); }
+  .stat span { color: var(--on-dark-muted); }
+  .stat:nth-child(2) { background: linear-gradient(135deg, rgba(255, 255, 255, .95), #F8DCE1); color: var(--ink-fixed); }
+  .stat:nth-child(2) span { color: #6E6668; }
+
+  /* Cartes claires : bord rose et ombre teintée de rouge */
+  .vcard, .steps li { border: 1.5px solid rgba(224, 33, 63, .18); box-shadow: 0 22px 40px -28px rgba(224, 33, 63, .55); }
+  .vcard.open { box-shadow: none; }
+  .steps li::before { background: linear-gradient(135deg, #E0213F, #7A1024); box-shadow: 0 8px 16px -8px rgba(224, 33, 63, .8); }
+
+  /* Appel final : dégradé rouge, icônes 3D */
+  .final { position: relative; overflow: visible; background: radial-gradient(420px 260px at 85% 0%, rgba(255, 154, 171, .6), transparent 70%), linear-gradient(130deg, #7A1024, #E0213F 55%, #FF5C77); box-shadow: 0 40px 70px -34px rgba(122, 16, 36, .7); }
+  .final .f3d { --s: 96px; z-index: 2; }
+  .final .e1 { right: 230px; top: -46px; --r: 10deg; }
+  .final .e2 { right: 150px; bottom: -40px; --s: 84px; --r: -12deg; animation-delay: -3s; }
+
+  @media (max-width: 860px) {
+    .hero .f3d { --s: 64px !important; opacity: .9; }
+    .hero .i1 { left: 2%; top: 10px; } .hero .i2 { right: 2%; top: 6px; } .hero .i3, .hero .i4 { display: none; }
+    .panel-sec { grid-template-columns: 1fr; padding: 8px 16px 56px; }
+    .pstage { min-height: 500px; }
+    .ui.fmt { left: 2%; width: 74%; } .ui.cnv { right: 2%; }
+    .final .f3d { display: none; }
+    .frame .f3d { --s: 64px; right: -10px; bottom: -30px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .f3d { animation: none; } }
 </style>
 </head>
 <body>
@@ -288,6 +369,10 @@
     </nav>
 
     <header class="hero" id="essayer">
+      <img class="f3d i1" src="assets/3d/format_916.webp" alt="" aria-hidden="true" width="320" height="320" fetchpriority="high">
+      <img class="f3d i2" src="assets/3d/etincelle.webp" alt="" aria-hidden="true" width="320" height="320">
+      <img class="f3d i3" src="assets/3d/calques.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
+      <img class="f3d i4" src="assets/3d/curseur.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
       <h1>Change de format. Garde <span class="sel"><b>tout.</b></span></h1>
       <p class="lead">Flip décline ta compo en 9:16, 4:5, 1:1 ou 16:9 en un clic. Textes, images, précomps et groupes de Nulls sont réorganisés et centrés, sans rien couper ni dénaturer.</p>
       <div class="cta">
@@ -305,6 +390,7 @@
         <span class="chip a">16:9 → 9:16</span>
         <span class="chip b">Rien n'est coupé</span>
         <span class="chip c">Précomps, Nulls et 3D</span>
+        <img class="f3d v1" src="assets/3d/validation.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
       </div>
       <p class="caption">Démo : une compo convertie en 9:16 depuis le panneau Flip, dans After Effects 2026.</p>
     </div>
@@ -320,21 +406,42 @@
       </ul>
     </div>
 
+
+    <section class="panel-sec" aria-labelledby="panelTitle">
+      <div>
+        <span class="tag"><b>v4.1</b>Le panneau</span>
+        <h2 id="panelTitle" style="margin-top:16px">Tout se règle dans un seul panneau.</h2>
+        <p class="lead">Choisis le format de sortie et la méthode, puis clique sur Convertir. Flip crée une copie de ta compo et la recompose pour le nouveau cadre.</p>
+        <div class="bullets">
+          <span><img src="assets/3d/format_916.webp" alt="" aria-hidden="true" loading="lazy">9:16, 4:5, 1:1, 16:9, Auto</span>
+          <span><img src="assets/3d/calques.webp" alt="" aria-hidden="true" loading="lazy">Réorganiser ou Ajuster</span>
+          <span><img src="assets/3d/validation.webp" alt="" aria-hidden="true" loading="lazy">Original intact</span>
+        </div>
+      </div>
+      <div class="pstage" role="img" aria-label="Le panneau Flip dans After Effects : choix du format, méthode et bouton Convertir">
+        <img class="panel" src="assets/ui/panneau.webp" alt="" width="680" height="1280" loading="lazy">
+        <img class="ui fmt" src="assets/ui/formats.webp" alt="" width="964" height="204" loading="lazy">
+        <img class="ui cnv" src="assets/ui/convertir.webp" alt="" width="948" height="140" loading="lazy">
+        <img class="f3d c1" src="assets/3d/curseur.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
+        <img class="f3d c2" src="assets/3d/etincelle.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
+        <img class="f3d c3" src="assets/3d/chrono.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
+      </div>
+    </section>
     <section class="dark" id="pourquoi">
       <div>
         <span class="tag"><b>16:9</b>Pourquoi Flip</span>
         <h2 style="margin-top:16px">Pensé pour les vrais projets.</h2>
         <ul class="feat">
-          <li><b>Rien n'est coupé</b><span>Chaque bloc est calé dans sa case : aucun élément ne déborde ni ne se superpose.</span></li>
-          <li><b>Ton original reste intact</b><span>Flip travaille sur une copie de la compo et de ses précomps.</span></li>
-          <li><b>Nulls, précomps, caches</b><span>Les groupes parentés bougent ensemble, les précomps plein écran sont converties aussi.</span></li>
-          <li><b>Scènes 3D</b><span>La caméra est recentrée, les fonds s'agrandissent pour couvrir le cadre.</span></li>
+          <li><img src="assets/3d/validation.webp" alt="" aria-hidden="true" loading="lazy"><b>Rien n'est coupé</b><span>Chaque bloc est calé dans sa case : aucun élément ne déborde ni ne se superpose.</span></li>
+          <li><img src="assets/3d/calques.webp" alt="" aria-hidden="true" loading="lazy"><b>Ton original reste intact</b><span>Flip travaille sur une copie de la compo et de ses précomps.</span></li>
+          <li><img src="assets/3d/cible_null.webp" alt="" aria-hidden="true" loading="lazy"><b>Nulls, précomps, caches</b><span>Les groupes parentés bougent ensemble, les précomps plein écran sont converties aussi.</span></li>
+          <li><img src="assets/3d/cube_3d.webp" alt="" aria-hidden="true" loading="lazy"><b>Scènes 3D</b><span>La caméra est recentrée, les fonds s'agrandissent pour couvrir le cadre.</span></li>
         </ul>
       </div>
       <div class="stats">
-        <div class="stat"><b>4</b><span>formats + mode Auto</span></div>
-        <div class="stat"><b>1 clic</b><span>par conversion</span></div>
-        <div class="stat"><b>Cmd + Z</b><span>pour tout annuler</span></div>
+        <div class="stat"><img src="assets/3d/format_916.webp" alt="" aria-hidden="true" loading="lazy"><b>4</b><span>formats + mode Auto</span></div>
+        <div class="stat"><img src="assets/3d/curseur.webp" alt="" aria-hidden="true" loading="lazy"><b>1 clic</b><span>par conversion</span></div>
+        <div class="stat"><img src="assets/3d/chrono.webp" alt="" aria-hidden="true" loading="lazy"><b>Cmd + Z</b><span>pour tout annuler</span></div>
       </div>
     </section>
 
@@ -400,6 +507,8 @@
     </section>
 
     <div class="final">
+      <img class="f3d e1" src="assets/3d/etincelle.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
+      <img class="f3d e2" src="assets/3d/curseur.webp" alt="" aria-hidden="true" width="320" height="320" loading="lazy">
       <div>
         <h2>Essaie Flip sur tes projets.</h2>
         <p>2000 FCFA pendant la bêta. Le prix augmentera avec les prochaines versions.</p>
